@@ -1,12 +1,14 @@
 // SPDX-License-Identifier: MIT
 pragma solidity >=0.8.0;
 
-import "@boringcrypto/boring-solidity/contracts/libraries/BoringMath.sol";
-import "@boringcrypto/boring-solidity/contracts/BoringBatchable.sol";
-import "@boringcrypto/boring-solidity/contracts/BoringOwnable.sol";
-import "./libraries/SignedSafeMath.sol";
-import "./interfaces/IRewarder.sol";
-import "./interfaces/IMasterChef.sol";
+import "libraries/BoringMath.sol";
+import "BoringSolidity/BoringBatchable.sol";
+import "BoringSolidity/BoringOwnable.sol";
+import "BoringSolidity/libraries/BoringERC20.sol";
+import "libraries/SignedSafeMath.sol";
+import "interfaces/IRewarder.sol";
+import "interfaces/IMasterChef.sol";
+
 
 interface IMigratorChef {
     // Take the current LP token address and return the new LP token address.
@@ -76,7 +78,7 @@ contract MiniChefV2 is BoringOwnable, BoringBatchable {
     event LogSushiPerSecond(uint256 sushiPerSecond);
 
     /// @param _sushi The SUSHI token contract address.
-    constructor(IERC20 _sushi) public {
+    constructor(IERC20 _sushi) {
         SUSHI = _sushi;
     }
 

@@ -1,11 +1,10 @@
 // SPDX-License-Identifier: MIT
+pragma solidity >=0.8.0;
 
-pragma solidity 0.6.12;
-pragma experimental ABIEncoderV2;
-import "../interfaces/IRewarder.sol";
-import "@boringcrypto/boring-solidity/contracts/libraries/BoringERC20.sol";
-import "@boringcrypto/boring-solidity/contracts/libraries/BoringMath.sol";
-import "@boringcrypto/boring-solidity/contracts/BoringOwnable.sol";
+import "interfaces/IRewarder.sol";
+import "BoringSolidity/libraries/BoringERC20.sol";
+import "libraries/BoringMath.sol";
+import "BoringSolidity/BoringOwnable.sol";
 
 interface IMasterChefV2 {
     function lpToken(uint256 pid) external view returns (IERC20 _lpToken);
@@ -66,16 +65,16 @@ contract CloneRewarderTimeDual is IRewarder,  BoringOwnable{
     event LogRewardPerSecond(uint256 rewardPerSecond1, uint256 rewardPerSecond2);
     event LogInit(IERC20 rewardToken1, IERC20 rewardToken2, address owner, uint256 rewardPerSecond1, uint256 rewardPerSecond2, IERC20 indexed masterLpToken);
 
-    constructor (address _MASTERCHEF_V2) public {
+    constructor (address _MASTERCHEF_V2) {
         MASTERCHEF_V2 = _MASTERCHEF_V2;
     }
 
     /// @notice Serves as the constructor for clones, as clones can't have a regular constructor
     /// @dev `data` is abi encoded in the format: (IERC20 collateral, IERC20 asset, IOracle oracle, bytes oracleData)
     function init(bytes calldata data) public payable {
-        require(rewardToken1 == IERC20(0), "Rewarder: already initialized");
+        require(rewardToken1 == IERC20(address(0)), "Rewarder: already initialized");
         (rewardToken1, rewardToken2, owner, rewardPerSecond1, rewardPerSecond2, masterLpToken) = abi.decode(data, (IERC20, IERC20, address, uint128, uint128, IERC20));
-        require(rewardToken1 != IERC20(0), "Rewarder: bad token");
+        require(rewardToken1 != IERC20(address(0)), "Rewarder: bad token");
         unlocked = 1;
         emit LogInit(rewardToken1, rewardToken2, owner, rewardPerSecond1, rewardPerSecond2, masterLpToken);
     }
