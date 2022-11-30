@@ -10,7 +10,7 @@ interface IMasterChefV2 {
     function lpToken(uint256 pid) external view returns (IERC20 _lpToken);
 }
 
-contract ComplexRewarderTime is IRewarder,  BoringOwnable{
+contract ComplexRewarderTime is IRewarder, BoringOwnable {
     using BoringMath for uint256;
     using BoringMath128 for uint128;
     using BoringERC20 for IERC20;
@@ -36,12 +36,12 @@ contract ComplexRewarderTime is IRewarder,  BoringOwnable{
     }
 
     /// @notice Info of each pool.
-    mapping (uint256 => PoolInfo) public poolInfo;
+    mapping(uint256 => PoolInfo) public poolInfo;
 
     uint256[] public poolIds;
 
     /// @notice Info of each user that stakes LP tokens.
-    mapping (uint256 => mapping (address => UserInfo)) public userInfo;
+    mapping(uint256 => mapping(address => UserInfo)) public userInfo;
     /// @dev Total allocation points. Must be the sum of all allocation points in all pools.
     uint256 totalAllocPoint;
 
@@ -65,23 +65,19 @@ contract ComplexRewarderTime is IRewarder,  BoringOwnable{
     event LogRewardPerSecond(uint256 rewardPerSecond);
     event LogInit();
 
-    constructor (IERC20 _rewardToken, uint256 _rewardPerSecond, address _MASTERCHEF_V2) {
+    constructor(IERC20 _rewardToken, uint256 _rewardPerSecond, address _MASTERCHEF_V2) {
         rewardToken = _rewardToken;
         rewardPerSecond = _rewardPerSecond;
         MASTERCHEF_V2 = _MASTERCHEF_V2;
         unlocked = 1;
     }
 
-
-    function onSushiReward (uint256 pid, address _user, address to, uint256, uint256 lpToken) onlyMCV2 lock override external {
+    function onSushiReward(uint256 pid, address _user, address to, uint256, uint256 lpToken) external override onlyMCV2 lock {
         PoolInfo memory pool = updatePool(pid);
         UserInfo storage user = userInfo[pid][_user];
         uint256 pending;
         if (user.amount > 0) {
-            pending =
-                (user.amount.mul(pool.accSushiPerShare) / ACC_TOKEN_PRECISION).sub(
-                    user.rewardDebt
-                ).add(user.unpaidRewards);
+            pending = (user.amount.mul(pool.accSushiPerShare) / ACC_TOKEN_PRECISION).sub(user.rewardDebt).add(user.unpaidRewards);
             uint256 balance = rewardToken.balanceOf(address(this));
             if (pending > balance) {
                 rewardToken.safeTransfer(to, balance);
@@ -96,7 +92,11 @@ contract ComplexRewarderTime is IRewarder,  BoringOwnable{
         emit LogOnReward(_user, pid, pending - user.unpaidRewards, to);
     }
 
-    function pendingTokens(uint256 pid, address user, uint256) override external view returns (IERC20[] memory rewardTokens, uint256[] memory rewardAmounts) {
+    function pendingTokens(
+        uint256 pid,
+        address user,
+        uint256
+    ) external view override returns (IERC20[] memory rewardTokens, uint256[] memory rewardAmounts) {
         IERC20[] memory _rewardTokens = new IERC20[](1);
         _rewardTokens[0] = (rewardToken);
         uint256[] memory _rewardAmounts = new uint256[](1);
@@ -111,11 +111,8 @@ contract ComplexRewarderTime is IRewarder,  BoringOwnable{
         emit LogRewardPerSecond(_rewardPerSecond);
     }
 
-    modifier onlyMCV2 {
-        require(
-            msg.sender == MASTERCHEF_V2,
-            "Only MCV2 can call this function."
-        );
+    modifier onlyMCV2() {
+        require(msg.sender == MASTERCHEF_V2, "Only MCV2 can call this function.");
         _;
     }
 
@@ -133,11 +130,7 @@ contract ComplexRewarderTime is IRewarder,  BoringOwnable{
         uint256 lastRewardTime = block.timestamp;
         totalAllocPoint = totalAllocPoint.add(allocPoint);
 
-        poolInfo[_pid] = PoolInfo({
-            allocPoint: allocPoint.to64(),
-            lastRewardTime: lastRewardTime.to64(),
-            accSushiPerShare: 0
-        });
+        poolInfo[_pid] = PoolInfo({allocPoint: allocPoint.to64(), lastRewardTime: lastRewardTime.to64(), accSushiPerShare: 0});
         poolIds.push(_pid);
         emit LogPoolAddition(_pid, allocPoint);
     }
@@ -209,5 +202,4 @@ contract ComplexRewarderTime is IRewarder,  BoringOwnable{
             emit LogUpdatePool(pid, pool.lastRewardTime, lpSupply, pool.accSushiPerShare);
         }
     }
-
 }

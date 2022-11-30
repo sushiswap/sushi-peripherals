@@ -11,7 +11,7 @@ interface IMasterChefV2 {
 }
 
 /// @author @0xKeno
-contract CloneRewarderTimeDual is IRewarder,  BoringOwnable{
+contract CloneRewarderTimeDual is IRewarder, BoringOwnable {
     using BoringMath for uint256;
     using BoringMath128 for uint128;
     using BoringERC20 for IERC20;
@@ -39,11 +39,10 @@ contract CloneRewarderTimeDual is IRewarder,  BoringOwnable{
     }
 
     /// @notice Info of each pool.
-    mapping (uint256 => PoolInfo) public poolInfo;
-
+    mapping(uint256 => PoolInfo) public poolInfo;
 
     /// @notice Info of each user that stakes LP tokens.
-    mapping (uint256 => mapping (address => UserInfo)) public userInfo;
+    mapping(uint256 => mapping(address => UserInfo)) public userInfo;
 
     uint128 public rewardPerSecond1;
     uint128 public rewardPerSecond2;
@@ -63,9 +62,16 @@ contract CloneRewarderTimeDual is IRewarder,  BoringOwnable{
     event LogOnReward(address indexed user, uint256 indexed pid, uint256 amount1, uint256 amount2, address indexed to);
     event LogUpdatePool(uint256 indexed pid, uint64 lastRewardTime, uint256 lpSupply, uint256 accToken1PerShare, uint256 accToken2PerShare);
     event LogRewardPerSecond(uint256 rewardPerSecond1, uint256 rewardPerSecond2);
-    event LogInit(IERC20 rewardToken1, IERC20 rewardToken2, address owner, uint256 rewardPerSecond1, uint256 rewardPerSecond2, IERC20 indexed masterLpToken);
+    event LogInit(
+        IERC20 rewardToken1,
+        IERC20 rewardToken2,
+        address owner,
+        uint256 rewardPerSecond1,
+        uint256 rewardPerSecond2,
+        IERC20 indexed masterLpToken
+    );
 
-    constructor (address _MASTERCHEF_V2) {
+    constructor(address _MASTERCHEF_V2) {
         MASTERCHEF_V2 = _MASTERCHEF_V2;
     }
 
@@ -73,13 +79,16 @@ contract CloneRewarderTimeDual is IRewarder,  BoringOwnable{
     /// @dev `data` is abi encoded in the format: (IERC20 collateral, IERC20 asset, IOracle oracle, bytes oracleData)
     function init(bytes calldata data) public payable {
         require(rewardToken1 == IERC20(address(0)), "Rewarder: already initialized");
-        (rewardToken1, rewardToken2, owner, rewardPerSecond1, rewardPerSecond2, masterLpToken) = abi.decode(data, (IERC20, IERC20, address, uint128, uint128, IERC20));
+        (rewardToken1, rewardToken2, owner, rewardPerSecond1, rewardPerSecond2, masterLpToken) = abi.decode(
+            data,
+            (IERC20, IERC20, address, uint128, uint128, IERC20)
+        );
         require(rewardToken1 != IERC20(address(0)), "Rewarder: bad token");
         unlocked = 1;
         emit LogInit(rewardToken1, rewardToken2, owner, rewardPerSecond1, rewardPerSecond2, masterLpToken);
     }
 
-    function onSushiReward (uint256 pid, address _user, address to, uint256, uint256 lpTokenAmount) onlyMCV2 lock override external {
+    function onSushiReward(uint256 pid, address _user, address to, uint256, uint256 lpTokenAmount) external override onlyMCV2 lock {
         require(IMasterChefV2(MASTERCHEF_V2).lpToken(pid) == masterLpToken);
 
         PoolInfo memory pool = updatePool(pid);
@@ -87,14 +96,12 @@ contract CloneRewarderTimeDual is IRewarder,  BoringOwnable{
         uint256 pending1;
         uint256 pending2;
         if (_userInfo.amount > 0) {
-            pending1 =
-                (_userInfo.amount.mul(pool.accToken1PerShare) / ACC_TOKEN_PRECISION).sub(
-                    _userInfo.rewardDebt1
-                ).add(_userInfo.unpaidRewards1);
-            pending2 =
-                (_userInfo.amount.mul(pool.accToken2PerShare) / ACC_TOKEN_PRECISION).sub(
-                    _userInfo.rewardDebt2
-                ).add(_userInfo.unpaidRewards2);
+            pending1 = (_userInfo.amount.mul(pool.accToken1PerShare) / ACC_TOKEN_PRECISION).sub(_userInfo.rewardDebt1).add(
+                _userInfo.unpaidRewards1
+            );
+            pending2 = (_userInfo.amount.mul(pool.accToken2PerShare) / ACC_TOKEN_PRECISION).sub(_userInfo.rewardDebt2).add(
+                _userInfo.unpaidRewards2
+            );
 
             uint256 balance1 = rewardToken1.balanceOf(address(this));
             uint256 balance2 = rewardToken2.balanceOf(address(this));
@@ -124,7 +131,11 @@ contract CloneRewarderTimeDual is IRewarder,  BoringOwnable{
         emit LogOnReward(_user, pid, pending1 - _userInfo.unpaidRewards1, pending2 - _userInfo.unpaidRewards2, to);
     }
 
-    function pendingTokens(uint256 pid, address user, uint256) override external view returns (IERC20[] memory rewardTokens, uint256[] memory rewardAmounts) {
+    function pendingTokens(
+        uint256 pid,
+        address user,
+        uint256
+    ) external view override returns (IERC20[] memory rewardTokens, uint256[] memory rewardAmounts) {
         IERC20[] memory _rewardTokens = new IERC20[](2);
         _rewardTokens[0] = rewardToken1;
         _rewardTokens[1] = rewardToken2;
@@ -165,11 +176,8 @@ contract CloneRewarderTimeDual is IRewarder,  BoringOwnable{
         }
     }
 
-    modifier onlyMCV2 {
-        require(
-            msg.sender == MASTERCHEF_V2,
-            "Only MCV2 can call this function."
-        );
+    modifier onlyMCV2() {
+        require(msg.sender == MASTERCHEF_V2, "Only MCV2 can call this function.");
         _;
     }
 

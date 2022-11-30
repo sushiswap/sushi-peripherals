@@ -9,7 +9,6 @@ import "libraries/SignedSafeMath.sol";
 import "interfaces/IRewarder.sol";
 import "interfaces/IMasterChef.sol";
 
-
 interface IMigratorChef {
     // Take the current LP token address and return the new LP token address.
     // Migrator should have full access to the caller's LP token.
@@ -57,10 +56,10 @@ contract MiniChefV2 is BoringOwnable, BoringBatchable {
     IRewarder[] public rewarder;
 
     /// @notice Info of each user that stakes LP tokens.
-    mapping (uint256 => mapping (address => UserInfo)) public userInfo;
+    mapping(uint256 => mapping(address => UserInfo)) public userInfo;
 
     /// @dev Tokens added
-    mapping (address => bool) public addedTokens;
+    mapping(address => bool) public addedTokens;
 
     /// @dev Total allocation points. Must be the sum of all allocation points in all pools.
     uint256 public totalAllocPoint;
@@ -98,11 +97,7 @@ contract MiniChefV2 is BoringOwnable, BoringBatchable {
         lpToken.push(_lpToken);
         rewarder.push(_rewarder);
 
-        poolInfo.push(PoolInfo({
-            allocPoint: allocPoint.to64(),
-            lastRewardTime: block.timestamp.to64(),
-            accSushiPerShare: 0
-        }));
+        poolInfo.push(PoolInfo({allocPoint: allocPoint.to64(), lastRewardTime: block.timestamp.to64(), accSushiPerShare: 0}));
         addedTokens[address(_lpToken)] = true;
         emit LogPoolAddition(lpToken.length.sub(1), allocPoint, _lpToken, _rewarder);
     }
@@ -115,7 +110,9 @@ contract MiniChefV2 is BoringOwnable, BoringBatchable {
     function set(uint256 _pid, uint256 _allocPoint, IRewarder _rewarder, bool overwrite) public onlyOwner {
         totalAllocPoint = totalAllocPoint.sub(poolInfo[_pid].allocPoint).add(_allocPoint);
         poolInfo[_pid].allocPoint = _allocPoint.to64();
-        if (overwrite) { rewarder[_pid] = _rewarder; }
+        if (overwrite) {
+            rewarder[_pid] = _rewarder;
+        }
         emit LogSetPool(_pid, _allocPoint, overwrite ? _rewarder : rewarder[_pid], overwrite);
     }
 
@@ -256,7 +253,7 @@ contract MiniChefV2 is BoringOwnable, BoringBatchable {
 
         IRewarder _rewarder = rewarder[pid];
         if (address(_rewarder) != address(0)) {
-            _rewarder.onSushiReward( pid, msg.sender, to, _pendingSushi, user.amount);
+            _rewarder.onSushiReward(pid, msg.sender, to, _pendingSushi, user.amount);
         }
 
         emit Harvest(msg.sender, pid, _pendingSushi);
