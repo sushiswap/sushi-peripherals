@@ -4,3 +4,6 @@
 [submodule "lib/solbase"]
 	path = lib/solbase
 	url = https://github.com/Sol-DAO/solbase
+[submodule "lib/BoringSolidity"]
+	path = lib/BoringSolidity
+	url = https://github.com/boringcrypto/BoringSolidity
