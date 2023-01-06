@@ -18,10 +18,6 @@ contract TridentMaker is BaseTest {
     forkPolygon(37729882);
     super.setUp();
 
-    //sushi = ERC20(constants.getAddress("mainnet.sushi"));
-    //usdc = ERC20(constants.getAddress("mainnet.usdc"));
-    //address sushiWhale = constants.getAddress("mainnet.whale.sushi");
-
     bentoBox = IBentoBoxV1(constants.getAddress("polygon.bentobox"));
 
     wmatic = ERC20(constants.getAddress("polygon.wmatic"));
