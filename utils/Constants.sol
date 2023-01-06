@@ -29,13 +29,22 @@ contract Constants {
         setAddress("mainnet.kashiV1.usdc.sushi", 0x263716dEe5b74C5Baed665Cb19c6017e51296fa2);
         setAddress("mainnet.kashiV1.swapperV1", 0x1766733112408b95239aD1951925567CB1203084);
         // Optimism
-
+        setAddress("optimism.bentobox", 0xc35DADB65012eC5796536bD9864eD8773aBc74C4);
+        setAddress("optimism.weth", 0x4200000000000000000000000000000000000006);
+        setAddress("optimism.usdc", 0x7F5c764cBc14f9669B88837ca1490cCa17c31607);
+        setAddress("optimism.usdt", 0x94b008aA00579c1307B0EF2c499aD98a8ce58e58);
+        setAddress("optimism.op", 0x4200000000000000000000000000000000000042);
+        setAddress("optimism.trident.factory.constant", 0x93395129bd3fcf49d95730D3C2737c17990fF328);
+        setAddress("optimism.trident.factory.stable", 0x827179dD56d07A7eeA32e3873493835da2866976);
 
         // Arbitrum
 
 
         // Polygon
-
+        setAddress("polygon.bentobox", 0x0319000133d3AdA02600f0875d2cf03D442C3367);
+        setAddress("polygon.wmatic", 0x0d500B1d8E8eF31E21C99d1Db9A6444d3ADf1270);
+        setAddress("polygon.usdc", 0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174);
+        setAddress("polygon.usdt", 0xc2132D05D31c914a87C6611C10748AEb04B58e8F);
 
         // Fantom
 
