@@ -1,33 +1,36 @@
 // SPDX-License-Identifier: MIT
 pragma solidity >=0.8.0;
 
-import "solbase/auth/Auth.sol";
+import "solmate/auth/Owned.sol";
 import "interfaces/IPool.sol";
 
-contract TridentUnwindooor is Auth {
+contract TridentUnwindooor is Owned {
   // Built for just stable and constant product pools
+  bytes4 private constant TRANSFER_SELECTOR = bytes4(keccak256(bytes('transfer(address,uint256)')));
 
   error SlippageProtection();
+  error TransferFailed();
 
   constructor(
-    address owner,
-    address user
-  ) Auth(owner, user) {}
+    address owner
+  ) Owned(owner) {}
+  // todo: look into adding different auth levels for functions
 
   function burnSinglePairs(
     address[] calldata pairs,
     uint256[] calldata amounts,
-    bool[] calldata keepToken0,
+    bool[] calldata keepTokens0,
     uint256[] calldata minimumOuts
-  ) external onlyTrusted {
+  ) external onlyOwner {
     for (uint256 i = 0; i < pairs.length; i++) {
       IPool pair = IPool(pairs[i]);
-      pair.transfer(address(pair), amounts[i]);
-      
-      if (keepToken0) {
-        bytes burnData = abi.encode(pair.token0(), address(this), true);
+      _safeTransfer(address(pair), address(pair), amounts[i]);
+
+      bytes memory burnData;
+      if (keepTokens0[i]) {
+        burnData = abi.encode(pair.token0(), address(this), true);
       } else {
-        bytes burnData = abi.encode(pair.token1(), address(this), true);
+        burnData = abi.encode(pair.token1(), address(this), true);
       }
 
       uint256 amountOut = pair.burnSingle(burnData);
@@ -40,14 +43,25 @@ contract TridentUnwindooor is Auth {
     uint256[] calldata amounts,
     uint256[] calldata minimumOut0,
     uint256[] calldata minimumOut1
-  ) external onlyTrusted {
+  ) external onlyOwner {
     for (uint256 i = 0; i < pairs.length; i++) {
       IPool pair = IPool(pairs[i]);
-      pair.transfer(address(pair), amounts[i]);
-      bytes burnData = abi.encode(address(this), true);
+      _safeTransfer(address(pair), address(pair), amounts[i]);
+      bytes memory burnData = abi.encode(address(this), true);
       
       IPool.TokenAmount[] memory withdrawnAmounts = pair.burn(burnData);
       if (withdrawnAmounts[0].amount < minimumOut0[i] || withdrawnAmounts[1].amount < minimumOut1[i]) revert SlippageProtection();
     }
   }
+
+  // todo: withdraw function
+  // thinking bout setting this up for splitters / having default address for
+  // where funds go. Maybe even setup mapping for which pairs go to certain addresses
+  // or fee splitters w/ check to not let swaps happen on those pairs
+
+  function _safeTransfer(address token, address to, uint value) internal {
+    (bool success, bytes memory data) = token.call(abi.encodeWithSelector(TRANSFER_SELECTOR, to, value));
+    if (!success || (data.length != 0 && !abi.decode(data, (bool)))) revert TransferFailed();
+  }
+
 }

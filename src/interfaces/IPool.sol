@@ -58,4 +58,9 @@ interface IPool {
         address token;
         uint256 amount;
     }
+
+    // update: in mind of constant product & stable pools
+    function token0() external view returns (address);
+    function token1() external view returns (address);
+
 }
