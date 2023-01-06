@@ -134,4 +134,14 @@ contract TridentMakeTest is BaseTest {
     assertGt(token0.balanceOf(address(tridentMaker)), 0);
     assertEq(token1.balanceOf(address(tridentMaker)), 0);
   }
+
+  function testSlippageBurnSingle() public {}
+  function testSlippageBurn() public {}
+  function testSlippageSwap() public {}
+
+  //todo: test owner controls
+
+  // todo: test withdraw
+
+  // todo: test doAction
 }
