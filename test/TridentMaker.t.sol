@@ -131,7 +131,7 @@ contract TridentMakeTest is BaseTest {
     tridentMaker.swap(tokensIn, swapPairs, amountsIn, minimumOuts);
 
     assertGt(swapToken.balanceOf(address(tridentMaker)), 0);
+    assertGt(token0.balanceOf(address(tridentMaker)), 0);
     assertEq(token1.balanceOf(address(tridentMaker)), 0);
-
   }
 }
