@@ -3,7 +3,6 @@ pragma solidity >=0.8.0;
 
 import "solbase/tokens/ERC20/ERC20.sol";
 import "utils/BaseTest.sol";
-import "interfaces/IBentoBoxV1.sol";
 import "makers/trident/TridentMaker.sol";
 
 import {console2} from "forge-std/console2.sol";
@@ -34,7 +33,7 @@ contract TridentMakeTest is BaseTest {
     ERC20 pairToken1 = ERC20(0x231BA46173b75E4D7cEa6DCE095A6c1c3E876270); //usdc-usdt 0.01%
 
     // deploy TridentMaker
-    tridentMaker = new TridentMaker(address(this));
+    tridentMaker = new TridentMaker(address(this), address(bentoBox));
 
     // fill maker w/ wmatic-usdc & usdc-usdt
     address pranker = 0x4bb4c1B0745ef7B4642fEECcd0740deC417ca0a0;
@@ -104,12 +103,8 @@ contract TridentMakeTest is BaseTest {
 
   function testSwap() public {
     // burn pair0 for both tokens swap token1 (usdc) for token1 of pair1 (usdt)
-    // something funky happening with this
-    // todo: lets do token0 to token1, since we know it's liquid
     ERC20 token0 = ERC20(pair0.token0());
     ERC20 token1 = ERC20(pair0.token1());
-
-    console2.log(ERC20(address(pair0)).balanceOf(address(tridentMaker)));
 
     address[] memory pairs = new address[](1);
     uint256[] memory amounts = new uint256[](1);
@@ -122,7 +117,7 @@ contract TridentMakeTest is BaseTest {
     tridentMaker.burnPairs(pairs, amounts, minAmounts0, minAmounts1);
 
     // swap token1 (usdc) for token1 of pair1 (usdt)
-    uint256 token1Amount = 10000; // 0.01 usdc
+    uint256 token1Amount = token1.balanceOf(address(tridentMaker));
     ERC20 swapToken = ERC20(pair1.token1());
     address[] memory tokensIn = new address[](1);
     address[] memory swapPairs = new address[](1);
@@ -136,7 +131,7 @@ contract TridentMakeTest is BaseTest {
     tridentMaker.swap(tokensIn, swapPairs, amountsIn, minimumOuts);
 
     assertGt(swapToken.balanceOf(address(tridentMaker)), 0);
-
+    assertEq(token1.balanceOf(address(tridentMaker)), 0);
 
   }
 }
