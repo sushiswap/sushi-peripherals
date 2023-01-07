@@ -147,7 +147,7 @@ contract TridentMakeTest is BaseTest {
     vm.expectRevert(abi.encodeWithSignature("SlippageProtection()"));
     tridentMaker.swap(tokensIn, swapPairs, amountsIn, minimumOuts);
   }
-  //todo: test owner controls
+
   function testNonOwnerWithdraw() public {
     ERC20 pairToken0 = ERC20(address(pair0));
     uint256 pairToken0Amount = pairToken0.balanceOf(address(tridentMaker));

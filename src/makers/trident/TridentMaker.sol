@@ -36,6 +36,11 @@ contract TridentMaker is TridentUnwindooor {
   // todo: thinking bout setting this up for splitters / having default address for
   // where funds go. Maybe even setup mapping for which pairs go to certain addresses
   // or fee splitters w/ check to not let swaps happen on those pairs
+
+  // todo: if setting splitter / hard set pairs to be re-directed somewhere
+  //       let's create a mapping of pairs to destination
+  //       function to iterate through all fee redirects & serve them in one call
+
   function withdraw(address token, address to, uint256 _value) onlyOwner external {
     if (token != address(0)) {
       _safeTransfer(token, to, _value);
