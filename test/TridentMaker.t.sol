@@ -49,11 +49,6 @@ contract TridentMakeTest is BaseTest {
     usdc.approve(address(bentoBox), 100 gwei);
     bentoBox.deposit(address(usdc), usdcWhale, usdcWhale, 100 gwei, 0);
     vm.stopPrank();
-    
-    uint256 helloBalance = bentoBox.balanceOf(address(usdc), usdcWhale);
-    assertEq(helloBalance, bentoBox.toShare(address(usdc), 100 gwei, false));
-
-    //assertEq(testPair0.token0(), address(weth));
   }
 
   function testBurnSinglePairs() public {
@@ -80,6 +75,10 @@ contract TridentMakeTest is BaseTest {
     assertEq(token0.balanceOf(address(tridentMaker)), firstBurnToken0Amount);
     assertGt(token1.balanceOf(address(tridentMaker)), 0);
 
+    // test slippage protection
+    minAmounts[0] = 1000 ether;
+    vm.expectRevert(abi.encodeWithSignature("SlippageProtection()"));
+    tridentMaker.burnSinglePairs(pairs, amounts, keepTokens0, minAmounts);
   }
 
   function testBurnPairs() public {
@@ -99,6 +98,12 @@ contract TridentMakeTest is BaseTest {
     tridentMaker.burnPairs(pairs, amounts, minAmounts0, minAmounts1);
     assertGt(token0.balanceOf(address(tridentMaker)), 0);
     assertGt(token1.balanceOf(address(tridentMaker)), 0);
+
+    // test slippage protection
+    minAmounts0[0] = 1000 ether;
+    minAmounts1[0] = 1000 ether;
+    vm.expectRevert(abi.encodeWithSignature("SlippageProtection()"));
+    tridentMaker.burnPairs(pairs, amounts, minAmounts0, minAmounts1);
   }
 
   function testSwap() public {
@@ -133,9 +138,19 @@ contract TridentMakeTest is BaseTest {
     assertGt(swapToken.balanceOf(address(tridentMaker)), 0);
     assertGt(token0.balanceOf(address(tridentMaker)), 0);
     assertEq(token1.balanceOf(address(tridentMaker)), 0);
+
+    // test slippage protection
+    tokensIn[0] = address(swapToken);
+    swapPairs[0] = address(pair1);
+    amountsIn[0] = swapToken.balanceOf(address(tridentMaker));
+    minimumOuts[0] = 1000 ether;
+    vm.expectRevert(abi.encodeWithSignature("SlippageProtection()"));
+    tridentMaker.swap(tokensIn, swapPairs, amountsIn, minimumOuts);
   }
 
-  function testSlippageBurnSingle() public {}
+  function testSlippageBurnSingle() public {
+
+  }
   function testSlippageBurn() public {}
   function testSlippageSwap() public {}
 
