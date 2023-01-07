@@ -3,8 +3,9 @@ pragma solidity >=0.8.0;
 
 import "solmate/auth/Owned.sol";
 import "interfaces/IPool.sol";
+import "interfaces/Auth.sol";
 
-contract TridentUnwindooor is Owned {
+contract TridentUnwindooor is Auth {
   // Built for just stable and constant product pools
   bytes4 private constant TRANSFER_SELECTOR = bytes4(keccak256(bytes('transfer(address,uint256)')));
 
@@ -12,16 +13,16 @@ contract TridentUnwindooor is Owned {
   error TransferFailed();
 
   constructor(
-    address owner
-  ) Owned(owner) {}
-  // todo: look into adding different auth levels for functions
+    address _owner,
+    address user
+  ) Auth(_owner, user) {}
 
   function burnSinglePairs(
     address[] calldata pairs,
     uint256[] calldata amounts,
     bool[] calldata keepTokens0,
     uint256[] calldata minimumOuts
-  ) external onlyOwner {
+  ) external onlyTrusted {
     for (uint256 i = 0; i < pairs.length; i++) {
       IPool pair = IPool(pairs[i]);
       _safeTransfer(address(pair), address(pair), amounts[i]);
@@ -43,7 +44,7 @@ contract TridentUnwindooor is Owned {
     uint256[] calldata amounts,
     uint256[] calldata minimumOut0,
     uint256[] calldata minimumOut1
-  ) external onlyOwner {
+  ) external onlyTrusted {
     for (uint256 i = 0; i < pairs.length; i++) {
       IPool pair = IPool(pairs[i]);
       _safeTransfer(address(pair), address(pair), amounts[i]);
@@ -54,14 +55,8 @@ contract TridentUnwindooor is Owned {
     }
   }
 
-  // todo: withdraw function
-  // thinking bout setting this up for splitters / having default address for
-  // where funds go. Maybe even setup mapping for which pairs go to certain addresses
-  // or fee splitters w/ check to not let swaps happen on those pairs
-
   function _safeTransfer(address token, address to, uint value) internal {
     (bool success, bytes memory data) = token.call(abi.encodeWithSelector(TRANSFER_SELECTOR, to, value));
     if (!success || (data.length != 0 && !abi.decode(data, (bool)))) revert TransferFailed();
   }
-
 }

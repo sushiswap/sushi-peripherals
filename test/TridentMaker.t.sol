@@ -33,7 +33,7 @@ contract TridentMakeTest is BaseTest {
     ERC20 pairToken1 = ERC20(0x231BA46173b75E4D7cEa6DCE095A6c1c3E876270); //usdc-usdt 0.01%
 
     // deploy TridentMaker
-    tridentMaker = new TridentMaker(address(this), address(bentoBox));
+    tridentMaker = new TridentMaker(address(this), address(this), address(bentoBox));
 
     // fill maker w/ wmatic-usdc & usdc-usdt
     address pranker = 0x4bb4c1B0745ef7B4642fEECcd0740deC417ca0a0;
@@ -147,16 +147,28 @@ contract TridentMakeTest is BaseTest {
     vm.expectRevert(abi.encodeWithSignature("SlippageProtection()"));
     tridentMaker.swap(tokensIn, swapPairs, amountsIn, minimumOuts);
   }
-
-  function testSlippageBurnSingle() public {
-
-  }
-  function testSlippageBurn() public {}
-  function testSlippageSwap() public {}
-
   //todo: test owner controls
+  function testNonOwnerWithdraw() public {
+    ERC20 pairToken0 = ERC20(address(pair0));
+    uint256 pairToken0Amount = pairToken0.balanceOf(address(tridentMaker));
+
+    // set alice as trusted user, and perform withdraw
+    tridentMaker.setTrusted(address(alice), true);
+
+    vm.prank(alice);
+    vm.expectRevert(abi.encodeWithSignature("OnlyOwner()"));
+    tridentMaker.withdraw(address(pair0), alice, pairToken0Amount);
+  }
 
   // todo: test withdraw
+  function testWithdraw() public {
+    ERC20 pairToken0 = ERC20(address(pair0));
+    uint256 pairToken0Amount = pairToken0.balanceOf(address(tridentMaker));
+
+    tridentMaker.withdraw(address(pair0), address(alice), pairToken0Amount);
+    assertEq(pairToken0.balanceOf(address(alice)), pairToken0Amount);
+    assertEq(pairToken0.balanceOf(address(tridentMaker)), 0);
+  }
 
   // todo: test doAction
 }
