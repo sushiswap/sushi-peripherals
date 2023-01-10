@@ -20,6 +20,10 @@ contract TridentUnwindooor is Auth {
 
   // Unwind pairs into a single token
   /// @dev burns pairs and unwinds position into one of the two tokens
+  /// @param pairs array of addresses of pairs to unwind
+  /// @param amounts array of amounts to burn
+  /// @param keepTokens0 array of booleans indicating whether to keep token0 or token1
+  /// @param minimumOuts array of minimum amounts to receive (slippage protection)
   function burnSinglePairs(
     address[] calldata pairs,
     uint256[] calldata amounts,
@@ -44,6 +48,10 @@ contract TridentUnwindooor is Auth {
 
   // Unwind pairs into token0 and token1
   /// @dev burns pairs and unwinds position into both tokens
+  /// @param pairs array of addresses of pairs to unwind
+  /// @param amounts array of amounts to burn
+  /// @param minimumOut0 array of minimum amounts to receive for token0 (slippage protection)
+  /// @param minimumOut1 array of minimum amounts to receive for token1 (slippage protection)
   function burnPairs(
     address[] calldata pairs,
     uint256[] calldata amounts,
