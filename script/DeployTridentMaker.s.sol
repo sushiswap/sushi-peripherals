@@ -12,6 +12,6 @@ contract DeployTridentMaker is Script {
     uint256 deployerPrivateKey = vm.envUint("PRIVATE_KEY");
     vm.startBroadcast(deployerPrivateKey);
 
-    TridentMaker maker = new TridentMaker(owner, user, bentobox);
+    new TridentMaker(owner, user, bentobox);
   }
 }
