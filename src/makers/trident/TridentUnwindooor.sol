@@ -5,8 +5,9 @@ import "solmate/auth/Owned.sol";
 import "interfaces/IPool.sol";
 import "interfaces/Auth.sol";
 
+/// @notice Contract for breaking down LP positions
+/// @dev Built in mind for Trident LP positions (stable and constant product)
 contract TridentUnwindooor is Auth {
-  // Built for just stable and constant product pools
   bytes4 private constant TRANSFER_SELECTOR = bytes4(keccak256(bytes('transfer(address,uint256)')));
 
   error SlippageProtection();
@@ -17,6 +18,8 @@ contract TridentUnwindooor is Auth {
     address user
   ) Auth(_owner, user) {}
 
+  // Unwind pairs into a single token
+  /// @dev burns pairs and unwinds position into one of the two tokens
   function burnSinglePairs(
     address[] calldata pairs,
     uint256[] calldata amounts,
@@ -39,6 +42,8 @@ contract TridentUnwindooor is Auth {
     }
   }
 
+  // Unwind pairs into token0 and token1
+  /// @dev burns pairs and unwinds position into both tokens
   function burnPairs(
     address[] calldata pairs,
     uint256[] calldata amounts,

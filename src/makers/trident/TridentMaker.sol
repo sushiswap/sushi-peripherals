@@ -5,7 +5,8 @@ import "./TridentUnwindooor.sol";
 import "interfaces/IBentoboxV1.sol";
 import "solmate/tokens/ERC20.sol";
 
-// contract for selling built up fees
+/// @notice Contract for withdrawing Trident LP positions
+/// @dev Can set tokenFeeTo to serve fees to set addresses with serveFees
 contract TridentMaker is TridentUnwindooor { 
   IBentoBoxV1 public immutable bentoBox;
   mapping(address => address) public tokenFeeTo;
@@ -18,6 +19,8 @@ contract TridentMaker is TridentUnwindooor {
     bentoBox = IBentoBoxV1(_bentoBox);
   }
 
+  // Perform swap
+  /// @dev swaps amountsIn of tokensIn through the swapPairs, with slippage protection set in minimumOuts
   function swap(
     address[] calldata tokensIn,
     address[] calldata swapPairs,
@@ -34,10 +37,14 @@ contract TridentMaker is TridentUnwindooor {
     }
   }
 
+  // Set feeTo for token/pair
+  /// @dev sets tokenFeeTo for a token to direct where it will be served to
   function setTokenFeeTo(address token, address feeTo) external onlyOwner {
     tokenFeeTo[token] = feeTo;
   }
 
+  /// serve the fees
+  /// @dev external function to serve fees for all tokens passed in where feeTo is set
   function serveFees(address[] calldata tokens) external {
     for (uint256 i = 0; i < tokens.length; i++) {
       address token = tokens[i];
@@ -49,6 +56,8 @@ contract TridentMaker is TridentUnwindooor {
     }
   }
 
+  // withdraw tokens
+  /// @dev onlyOwner call to withdraw tokens from the contract
   function withdraw(address token, address to, uint256 _value) onlyOwner external {
     if (token != address(0)) {
       _safeTransfer(token, to, _value);
@@ -57,7 +66,9 @@ contract TridentMaker is TridentUnwindooor {
       require(success);
     }
   }
-
+  
+  // do any action
+  ///@dev onlyOwner call to perform any action, can be used for emergencies or performing operations not supported thru contract
   function doAction(address to, uint256 _value, bytes memory data) onlyOwner external {
     (bool success, ) = to.call{value: _value}(data);
     require(success);
