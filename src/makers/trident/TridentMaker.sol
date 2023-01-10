@@ -3,11 +3,12 @@ pragma solidity >=0.8.0;
 
 import "./TridentUnwindooor.sol";
 import "interfaces/IBentoboxV1.sol";
+import "solmate/tokens/ERC20.sol";
 
 // contract for selling built up fees
-contract TridentMaker is TridentUnwindooor {
-  
+contract TridentMaker is TridentUnwindooor { 
   IBentoBoxV1 public immutable bentoBox;
+  mapping(address => address) public tokenFeeTo;
 
   constructor(
     address _owner,
@@ -33,13 +34,20 @@ contract TridentMaker is TridentUnwindooor {
     }
   }
 
-  // todo: thinking bout setting this up for splitters / having default address for
-  // where funds go. Maybe even setup mapping for which pairs go to certain addresses
-  // or fee splitters w/ check to not let swaps happen on those pairs
+  function setTokenFeeTo(address token, address feeTo) external onlyOwner {
+    tokenFeeTo[token] = feeTo;
+  }
 
-  // todo: if setting splitter / hard set pairs to be re-directed somewhere
-  //       let's create a mapping of pairs to destination
-  //       function to iterate through all fee redirects & serve them in one call
+  function serveFees(address[] calldata tokens) external {
+    for (uint256 i = 0; i < tokens.length; i++) {
+      address token = tokens[i];
+      address feeTo = tokenFeeTo[token];
+      if (feeTo != address(0)) {
+        uint256 balance = ERC20(token).balanceOf(address(this));
+        _safeTransfer(token, feeTo, balance);
+      }
+    }
+  }
 
   function withdraw(address token, address to, uint256 _value) onlyOwner external {
     if (token != address(0)) {

@@ -1,7 +1,6 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 pragma solidity >=0.8.0;
 
-import "solbase/tokens/ERC20/ERC20.sol";
 import "utils/BaseTest.sol";
 import "makers/trident/TridentMaker.sol";
 
@@ -168,6 +167,21 @@ contract TridentMakeTest is BaseTest {
     tridentMaker.withdraw(address(pair0), address(alice), pairToken0Amount);
     assertEq(pairToken0.balanceOf(address(alice)), pairToken0Amount);
     assertEq(pairToken0.balanceOf(address(tridentMaker)), 0);
+  }
+
+  function testFeesTo() public {
+    // set feesTo for pair0 to alice
+    tridentMaker.setTokenFeeTo(address(pair0), address(alice));
+    assertEq(tridentMaker.tokenFeeTo(address(pair0)), address(alice));
+
+    // serve pair0 to alice
+    ERC20 pairToken0 = ERC20(address(pair0));
+    uint256 preServeBalance = pairToken0.balanceOf(address(tridentMaker));
+    address[] memory pairsToServe = new address[](1);
+    pairsToServe[0] = address(pair0);
+    tridentMaker.serveFees(pairsToServe);
+    assertEq(pairToken0.balanceOf(address(tridentMaker)), 0);
+    assertEq(pairToken0.balanceOf(address(alice)), preServeBalance);
   }
 
   // todo: test doAction
