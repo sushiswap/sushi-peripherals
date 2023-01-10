@@ -1,0 +1,6 @@
+TridentMakeTest:testBurnPairs() (gas: 236012)
+TridentMakeTest:testBurnSinglePairs() (gas: 257272)
+TridentMakeTest:testHello() (gas: 81807)
+TridentMakeTest:testNonOwnerWithdraw() (gas: 46136)
+TridentMakeTest:testSwap() (gas: 374024)
+TridentMakeTest:testWithdraw() (gas: 43888)
