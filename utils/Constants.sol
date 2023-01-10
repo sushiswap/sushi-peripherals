@@ -75,7 +75,4 @@ contract Constants {
         require(pairCodeHash[key] != "", string.concat("pairCodeHash not found: ", key));
         return pairCodeHash[key];
     }
-
-
-
 }

@@ -163,7 +163,7 @@ contract TridentMakeTest is BaseTest {
   function testWithdraw() public {
     ERC20 pairToken0 = ERC20(address(pair0));
     uint256 pairToken0Amount = pairToken0.balanceOf(address(tridentMaker));
-
+  
     tridentMaker.withdraw(address(pair0), address(alice), pairToken0Amount);
     assertEq(pairToken0.balanceOf(address(alice)), pairToken0Amount);
     assertEq(pairToken0.balanceOf(address(tridentMaker)), 0);
@@ -183,6 +183,4 @@ contract TridentMakeTest is BaseTest {
     assertEq(pairToken0.balanceOf(address(tridentMaker)), 0);
     assertEq(pairToken0.balanceOf(address(alice)), preServeBalance);
   }
-
-  // todo: test doAction
 }

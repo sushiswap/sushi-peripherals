@@ -11,6 +11,9 @@ contract TridentMaker is TridentUnwindooor {
   IBentoBoxV1 public immutable bentoBox;
   mapping(address => address) public tokenFeeTo;
 
+  event Withdrawn(address indexed token, address to, uint256 amount);
+  event Served(address indexed feeTo, address indexed token, uint256 amount);
+
   constructor(
     address _owner,
     address user,
@@ -59,6 +62,7 @@ contract TridentMaker is TridentUnwindooor {
       if (feeTo != address(0)) {
         uint256 balance = ERC20(token).balanceOf(address(this));
         _safeTransfer(token, feeTo, balance);
+        emit Served(feeTo, token, balance);
       }
     }
   }
@@ -75,6 +79,7 @@ contract TridentMaker is TridentUnwindooor {
       (bool success, ) = to.call{value: _value}("");
       require(success);
     }
+    emit Withdrawn(token, to, _value);
   }
   
   // Do any action
