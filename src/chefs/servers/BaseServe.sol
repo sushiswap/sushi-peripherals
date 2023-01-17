@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: MIT
 pragma solidity >=0.8.0;
 
-import "@openzeppelin/contracts/access/Ownable.sol";
-import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import "openzeppelin/access/Ownable.sol";
+import "openzeppelin/token/ERC20/IERC20.sol";
 
 interface IMasterChefV1 {
     function withdraw(uint256 _pid, uint256 _amount) external;
