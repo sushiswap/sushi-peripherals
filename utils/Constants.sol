@@ -26,6 +26,9 @@ contract Constants {
         setAddress("mainnet.whale.sushi", 0xcBE6B83e77cdc011Cc18F6f0Df8444E5783ed982);
         setAddress("mainnet.whale.usdc", 0x55FE002aefF02F77364de339a1292923A15844B8);
 
+        setAddress("mainnet.masterchef", 0xc2EdaD668740f1aA35E4D8f227fB8E17dcA888Cd);
+        setAddress("mainnet.masterchefV2", 0xEF0881eC094552b2e128Cf945EF17a6752B4Ec5d );
+
         setAddress("mainnet.kashiV1.usdc.sushi", 0x263716dEe5b74C5Baed665Cb19c6017e51296fa2);
         setAddress("mainnet.kashiV1.swapperV1", 0x1766733112408b95239aD1951925567CB1203084);
         // Optimism
