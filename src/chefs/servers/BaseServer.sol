@@ -12,6 +12,7 @@ interface IMasterChefV1 {
 
 interface IBridgeAdapter {
     function bridge() external;
+    function bridgeWithData(bytes calldata data) external;
 }
 
 abstract contract BaseServer is Ownable {
@@ -86,5 +87,16 @@ abstract contract BaseServer is Ownable {
         }
     }
 
+    function bridgeWithData(bytes calldata data) public {
+        if (bridgeAdapter == address(this)) {
+            _bridgeWithData(data);
+        } else {
+            uint256 sushiBalance = sushi.balanceOf(address(this));
+            sushi.transfer(bridgeAdapter, sushiBalance);
+            IBridgeAdapter(bridgeAdapter).bridgeWithData(data);
+        }
+    }
+
     function _bridge() internal virtual;
+    function _bridgeWithData(bytes calldata data) internal virtual;
 }
