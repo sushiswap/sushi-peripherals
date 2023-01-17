@@ -34,6 +34,8 @@ contract PolygonServer is BaseServer {
         emit BridgedSushi(minichef, sushiBalance);
     }
 
+    function _bridgeWithData(bytes calldata data) internal override {}
+
     function toBytes(uint256 x) internal pure returns (bytes memory b) {
         b = new bytes(32);
         assembly {

@@ -30,4 +30,6 @@ contract HarmonyServer is BaseServer {
         );
         emit BridgedSushi(minichef, sushiBalance);
     }
+
+    function _bridgeWithData(bytes calldata data) internal override {}
 }
