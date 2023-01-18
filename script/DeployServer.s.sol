@@ -12,7 +12,7 @@ contract DeployServer is Script {
     constants = new Constants();
 
     address masterChefV2 = constants.getAddress("mainnet.masterchefV2");
-    uint256 pid = 11;
+    uint256 pid = 350;
     uint256 deployerPrivateKey = vm.envUint("PRIVATE_KEY");
     vm.startBroadcast(deployerPrivateKey);
 

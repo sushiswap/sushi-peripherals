@@ -29,4 +29,7 @@ playground-trace: FOUNDRY_TEST:=playground
 playground-trace:
 	forge test --match-path playground/Playground.t.sol -vvvv --gas-report
 
+deploy-server:
+	forge script ./script/DeployServer.s.sol --broadcast --verify --rpc-url ${MAINNET_RPC_URL}
+
 .PHONY: test playground
