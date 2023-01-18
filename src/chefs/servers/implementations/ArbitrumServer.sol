@@ -41,11 +41,10 @@ contract ArbitrumServer is BaseServer {
       address _l1Token, 
       address _refundTo,
       address _to,
-      uint256 _amount,
       uint256 _maxGas,
       uint256 _gasPriceBid,
       bytes memory _data
-    ) = abi.decode(data, (address, address, address, uint256, uint256, uint256, bytes));
+    ) = abi.decode(data, (address, address, address, uint256, uint256, bytes));
 
     uint256 sushiBalance = sushi.balanceOf(address(this));
 
@@ -54,7 +53,7 @@ contract ArbitrumServer is BaseServer {
       _l1Token,
       _refundTo,
       _to,
-      _amount,
+      sushiBalance,
       _maxGas,
       _gasPriceBid,
       _data
