@@ -22,10 +22,9 @@ abstract contract BaseServer is Ownable {
         IERC20(0x6B3595068778DD592e39A122f4f5a5cF09C90fE2);
 
     uint256 public immutable pid;
-
     address public immutable minichef;
-
     address public bridgeAdapter;
+    uint256 public lastServe;
 
     event Harvested(uint256 indexed pid);
     event Withdrawn(uint256 indexed pid, uint256 indexed amount);
@@ -85,6 +84,7 @@ abstract contract BaseServer is Ownable {
             sushi.transfer(bridgeAdapter, sushiBalance);
             IBridgeAdapter(bridgeAdapter).bridge();
         }
+        lastServe = block.timestamp;
     }
 
     function bridgeWithData(bytes calldata data) public {
