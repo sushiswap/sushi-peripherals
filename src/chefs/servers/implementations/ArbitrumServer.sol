@@ -3,19 +3,7 @@ pragma solidity >=0.8.0;
 
 import "../BaseServer.sol";
 
-// maybe add owner for bridge? not sure if anything bad can happen if gas prices aren't set correctly
-
 interface IArbitrumBridge {
-  // going to be deprecated
-  function outboundTransfer(
-    address _l1Token,
-    address _to,
-    uint256 _amount,
-    uint256 _maxGas,
-    uint256 _gasPriceBid,
-    bytes calldata _data
-  ) external payable returns (bytes memory res);
-
   function outboundTransferCustomRefund(
     address _l1Token,
     address _refundTo,
@@ -27,17 +15,30 @@ interface IArbitrumBridge {
   ) external payable returns (bytes memory res);
 }
 
+/// @notice Contract bridges Sushi to arbitrum chains using their official bridge
+/// @dev takes an operator address in constructor to guard _bridge call
 contract ArbitrumServer is BaseServer {
-  address public constant bridgeAddr = 0x72Ce9c846789fdB6fC1f34aC4AD25Dd9ef7031ef;
+  address public bridgeAddr;
+  address public operatorAddr;
 
-  constructor(uint256 _pid, address _minichef) BaseServer(_pid, _minichef) {}
+  error NotAuthorizedToBridge();
 
+  constructor(uint256 _pid, address _minichef, address _bridgeAddr, address _operatorAddr) BaseServer(_pid, _minichef) {
+    bridgeAddr = _bridgeAddr;
+    operatorAddr = _operatorAddr;
+  }
+
+  // Internally performs bridging
+  /// @dev bridge sushi through arbitrum bridge
+  /// @param data is used: address refundTo, uint256 maxGas, uint256 gasPriceBid, bytes bridgeData
   function _bridge(bytes calldata data) internal override {
+    if (msg.sender != operatorAddr) revert NotAuthorizedToBridge();
+
     (
-      address _refundTo,
-      uint256 _maxGas,
-      uint256 _gasPriceBid,
-      bytes memory _data
+      address refundTo,
+      uint256 maxGas,
+      uint256 gasPriceBid,
+      bytes memory bridgeData
     ) = abi.decode(data, (address, uint256, uint256, bytes));
 
     uint256 sushiBalance = sushi.balanceOf(address(this));
@@ -45,14 +46,19 @@ contract ArbitrumServer is BaseServer {
     sushi.approve(bridgeAddr, sushiBalance);
     IArbitrumBridge(bridgeAddr).outboundTransferCustomRefund(
       address(sushi),
-      _refundTo,
+      refundTo,
       minichef,
       sushiBalance,
-      _maxGas,
-      _gasPriceBid,
-      _data
+      maxGas,
+      gasPriceBid,
+      bridgeData
     );
 
     emit BridgedSushi(minichef, sushiBalance);
+  }
+
+  /// @dev set operator address, to guard _bridge call
+  function setOperatorAddr(address newAddy) external onlyOwner {
+    operatorAddr = newAddy;
   }
 }
