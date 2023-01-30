@@ -15,11 +15,9 @@ contract HarmonyServer is BaseServer {
     address public constant bridgeAddr =
         0x2dCCDB493827E15a5dC8f8b72147E6c4A5620857;
 
-    event BridgedSushi(address indexed minichef, uint256 indexed amount);
-
     constructor(uint256 _pid, address _minichef) BaseServer(_pid, _minichef) {}
 
-    function _bridge() internal override {
+    function _bridge(bytes calldata data) internal override {
         uint256 sushiBalance = sushi.balanceOf(address(this));
 
         sushi.approve(bridgeAddr, sushiBalance);
@@ -30,6 +28,4 @@ contract HarmonyServer is BaseServer {
         );
         emit BridgedSushi(minichef, sushiBalance);
     }
-
-    function _bridgeWithData(bytes calldata data) internal override {}
 }

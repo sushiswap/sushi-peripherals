@@ -30,26 +30,21 @@ interface IArbitrumBridge {
 contract ArbitrumServer is BaseServer {
   address public constant bridgeAddr = 0x72Ce9c846789fdB6fC1f34aC4AD25Dd9ef7031ef;
 
-  event BridgedSushi(address indexed minichef, uint256 indexed amount);
-
   constructor(uint256 _pid, address _minichef) BaseServer(_pid, _minichef) {}
 
-  function _bridge() internal override {}
-
-  function _bridgeWithData(bytes calldata data) internal override {
+  function _bridge(bytes calldata data) internal override {
     (
-      address _l1Token, 
       address _refundTo,
       uint256 _maxGas,
       uint256 _gasPriceBid,
       bytes memory _data
-    ) = abi.decode(data, (address, address, uint256, uint256, bytes));
+    ) = abi.decode(data, (address, uint256, uint256, bytes));
 
     uint256 sushiBalance = sushi.balanceOf(address(this));
 
     sushi.approve(bridgeAddr, sushiBalance);
     IArbitrumBridge(bridgeAddr).outboundTransferCustomRefund(
-      _l1Token,
+      address(sushi),
       _refundTo,
       minichef,
       sushiBalance,
@@ -57,6 +52,7 @@ contract ArbitrumServer is BaseServer {
       _gasPriceBid,
       _data
     );
+
     emit BridgedSushi(minichef, sushiBalance);
   }
 }

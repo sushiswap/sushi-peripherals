@@ -17,8 +17,6 @@ contract AnyswapServer is BaseServer {
         0x6b7a87899490EcE95443e979cA9485CBE7E71522;
     uint256 public immutable chainId;
 
-    event BridgedSushi(address indexed minichef, uint256 indexed amount);
-
     constructor(
         uint256 _pid,
         address _minichef,
@@ -27,7 +25,7 @@ contract AnyswapServer is BaseServer {
         chainId = _chainId;
     }
 
-    function _bridge() internal override {
+    function _bridge(bytes calldata data) internal override {
         uint256 sushiBalance = sushi.balanceOf(address(this));
 
         sushi.approve(bridgeAddr, sushiBalance);
@@ -39,6 +37,4 @@ contract AnyswapServer is BaseServer {
         );
         emit BridgedSushi(minichef, sushiBalance);
     }
-    
-    function _bridgeWithData(bytes calldata data) internal override {}
 }

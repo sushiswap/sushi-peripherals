@@ -16,11 +16,9 @@ contract CeloServer is BaseServer {
     address public constant bridgeAddr =
         0x4fc16De11deAc71E8b2Db539d82d93BE4b486892;
 
-    event BridgedSushi(address indexed minichef, uint256 indexed amount);
-
     constructor(uint256 _pid, address _minichef) BaseServer(_pid, _minichef) {}
 
-    function _bridge() internal override {
+    function _bridge(bytes calldata data) internal override {
         uint256 sushiBalance = sushi.balanceOf(address(this));
 
         sushi.approve(bridgeAddr, sushiBalance);
@@ -32,6 +30,4 @@ contract CeloServer is BaseServer {
         );
         emit BridgedSushi(minichef, sushiBalance);
     }
-
-    function _bridgeWithData(bytes calldata data) internal override {}
 }

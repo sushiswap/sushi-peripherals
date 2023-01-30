@@ -17,11 +17,9 @@ contract PolygonServer is BaseServer {
     address public constant polygonErcBridge =
         0x40ec5B33f54e0E8A33A975908C5BA1c14e5BbbDf;
 
-    event BridgedSushi(address indexed minichef, uint256 indexed amount);
-
     constructor(uint256 _pid, address _minichef) BaseServer(_pid, _minichef) {}
 
-    function _bridge() internal override {
+    function _bridge(bytes calldata data) internal override {
         uint256 sushiBalance = sushi.balanceOf(address(this));
 
         sushi.approve(address(polygonErcBridge), sushiBalance);
@@ -33,8 +31,6 @@ contract PolygonServer is BaseServer {
 
         emit BridgedSushi(minichef, sushiBalance);
     }
-
-    function _bridgeWithData(bytes calldata data) internal override {}
 
     function toBytes(uint256 x) internal pure returns (bytes memory b) {
         b = new bytes(32);

@@ -32,6 +32,7 @@ abstract contract BaseServer is Ownable {
     event WithdrawnSushi(uint256 indexed pid, uint256 indexed amount);
     event WithdrawnDummyToken(uint256 indexed pid);
     event BridgeUpdated(address indexed newBridgeAdapter);
+    event BridgedSushi(address indexed minichef, uint256 indexed amount);  // make sure you fire event
 
     constructor(uint256 _pid, address _minichef) {
         pid = _pid;
@@ -39,9 +40,9 @@ abstract contract BaseServer is Ownable {
         bridgeAdapter = address(this);
     }
 
-    function harvestAndBridge() public {
+    function harvestAndBridge(bytes calldata data) public {
         masterchefV1.withdraw(pid, 0);
-        bridge();
+        bridge(data);
         emit Harvested(pid);
     }
 
@@ -76,9 +77,9 @@ abstract contract BaseServer is Ownable {
         emit BridgeUpdated(newBridgeAdapter);
     }
 
-    function bridge() public {
+    function bridge(bytes calldata data) public {
         if (bridgeAdapter == address(this)) {
-            _bridge();
+            _bridge(data);
         } else {
             uint256 sushiBalance = sushi.balanceOf(address(this));
             sushi.transfer(bridgeAdapter, sushiBalance);
@@ -87,16 +88,5 @@ abstract contract BaseServer is Ownable {
         lastServe = block.timestamp;
     }
 
-    function bridgeWithData(bytes calldata data) public {
-        if (bridgeAdapter == address(this)) {
-            _bridgeWithData(data);
-        } else {
-            uint256 sushiBalance = sushi.balanceOf(address(this));
-            sushi.transfer(bridgeAdapter, sushiBalance);
-            IBridgeAdapter(bridgeAdapter).bridgeWithData(data);
-        }
-    }
-
-    function _bridge() internal virtual;
-    function _bridgeWithData(bytes calldata data) internal virtual;
+    function _bridge(bytes calldata data) internal virtual;
 }
