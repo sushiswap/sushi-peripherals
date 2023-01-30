@@ -11,19 +11,25 @@ interface IPolygonBridge {
     ) external;
 }
 
-contract PolygonServer is BaseServer {
-    address public constant bridgeAddr =
-        0xA0c68C638235ee32657e8f720a23ceC1bFc77C77;
-    address public constant polygonErcBridge =
-        0x40ec5B33f54e0E8A33A975908C5BA1c14e5BbbDf;
+/// @notice Contract bridges Sushi to a chain w/ a PoS style bridge
+/// @dev two step bridge process w/ approval on bridge and invoking deposit call on manager
+contract PosServer is BaseServer {
+    address public posManager;
+    address public ercBridge;
 
-    constructor(uint256 _pid, address _minichef) BaseServer(_pid, _minichef) {}
+    constructor(uint256 _pid, address _minichef, address _posManager, address _ercBridge) BaseServer(_pid, _minichef) {
+        posManager = _posManager;
+        ercBridge = _ercBridge;
+    }
 
+    // Internally perform bridging
+    /// @dev bridge sushi through pos bridge
+    /// @param data is not used
     function _bridge(bytes calldata data) internal override {
         uint256 sushiBalance = sushi.balanceOf(address(this));
 
-        sushi.approve(address(polygonErcBridge), sushiBalance);
-        IPolygonBridge(bridgeAddr).depositFor(
+        sushi.approve(address(ercBridge), sushiBalance);
+        IPolygonBridge(posManager).depositFor(
             minichef,
             address(sushi),
             toBytes(sushiBalance)
