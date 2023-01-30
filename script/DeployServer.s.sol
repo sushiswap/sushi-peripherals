@@ -6,6 +6,8 @@ import "utils/Constants.sol";
 import "chefs/servers/implementations/ArbitrumServer.sol";
 import "chefs/servers/implementations/PosServer.sol";
 import "chefs/servers/implementations/BobaGatewayServer.sol";
+import "chefs/servers/implementations/MultichainServer.sol";
+
 
 contract DeployServer is Script {
   Constants internal constants;
@@ -22,8 +24,7 @@ contract DeployServer is Script {
     deployPolygonServer();
     deployBttcServer();
     deployBobaServer();
-    // boba avax
-    // boba bnb
+    deployBscServer();
   }
 
 
@@ -65,6 +66,16 @@ contract DeployServer is Script {
 
     BobaGatewayServer bobaServer = new BobaGatewayServer(pid, minichef, bridgeAddr, operator);
     bobaServer.transferOwnership(owner);
+  }
+
+  function deployBscServer() public {
+    address minichef = constants.getAddress("bsc.minichef");
+    address router = 0x765277EebeCA2e31912C9946eAe1021199B39C61;
+    uint256 chainId = 56;
+    uint256 pid = 357;
+
+    MultichainServer bscServer = new MultichainServer(pid, minichef, chainId, router);
+    bscServer.transferOwnership(owner);
   }
 
 

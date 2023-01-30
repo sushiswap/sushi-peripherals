@@ -26,9 +26,8 @@ contract BobaGatewayServer is BaseServer {
     operatorAddr = _operatorAddr;
   }
 
-  // Internally performs bridging
-  /// @dev bridge sushi through boba gateway bridge
-  /// @param data is used: 
+  /// @dev internal bridge call
+  /// @param data is used: address l2Token, uint32 l2Gas, bytes bridgeData
   function _bridge(bytes calldata data) internal override {
     if (msg.sender != operatorAddr) revert NotAuthorizedToBridge();
 

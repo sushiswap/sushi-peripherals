@@ -22,8 +22,7 @@ contract PosServer is BaseServer {
         ercBridge = _ercBridge;
     }
 
-    // Internally perform bridging
-    /// @dev bridge sushi through pos bridge
+    /// @dev internal bridge call
     /// @param data is not used
     function _bridge(bytes calldata data) internal override {
         uint256 sushiBalance = sushi.balanceOf(address(this));

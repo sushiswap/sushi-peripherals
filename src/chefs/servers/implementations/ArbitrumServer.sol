@@ -28,8 +28,7 @@ contract ArbitrumServer is BaseServer {
     operatorAddr = _operatorAddr;
   }
 
-  // Internally performs bridging
-  /// @dev bridge sushi through arbitrum bridge
+  /// @dev internal bridge call
   /// @param data is used: address refundTo, uint256 maxGas, uint256 gasPriceBid, bytes bridgeData
   function _bridge(bytes calldata data) internal override {
     if (msg.sender != operatorAddr) revert NotAuthorizedToBridge();
