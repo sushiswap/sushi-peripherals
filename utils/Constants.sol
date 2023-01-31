@@ -52,6 +52,26 @@ contract Constants {
         // Fantom
 
 
+        // MiniChefs
+        setAddress("arbitrum.minichef", 0xF4d73326C13a4Fc5FD7A064217e12780e9Bd62c3);
+        setAddress("nova.minichef", 0xC09756432dAD2FF50B2D40618f7B04546DD20043);
+        setAddress("avalanche.minichef", 0xe11252176CEDd4a493Aec9767192C06A04A6B04F);
+        setAddress("bttc.minichef", 0xC09756432dAD2FF50B2D40618f7B04546DD20043);
+        setAddress("boba.minichef", 0x75f52766A6a23F736edEfCD69dfBE6153a48c3F3);
+        setAddress("bsc.minichef", 0x5219C5E32b9FFf87F29d5A833832c29134464aaa);
+        setAddress("celo.minichef", 0x8084936982D089130e001b470eDf58faCA445008);
+        setAddress("fantom.minichef", 0xf731202A3cf7EfA9368C2d7bD613926f7A144dB5);
+        setAddress("fuse.minichef", 0x182CD0C6F1FaEc0aED2eA83cd0e160c8Bd4cb063);
+        setAddress("gnosis.minichef", 0xdDCbf776dF3dE60163066A5ddDF2277cB445E0F3);
+        setAddress("kava.minichef", 0xf731202A3cf7EfA9368C2d7bD613926f7A144dB5);
+        setAddress("metis.minichef", 0x1334c8e873E1cae8467156e2A81d1C8b566B2da1);
+        //setAddress("moonbeam.minichef", );
+        setAddress("moonriver.minichef", 0x3dB01570D97631f69bbb0ba39796865456Cf89A5);
+        //setAddress("optimism.minichef", );
+        setAddress("polygon.minichef", 0x0769fd68dFb93167989C6f7254cd0D766Fb2841F);
+        //setAddress("telos.minichef", );
+
+
         pairCodeHash["mainnet.sushiV2"] = 0xe18a34eb0e04b04f7a0ac29a6e80748dca96319b42c54d679cb821dca90c6303;
         // bytescodehashes for trident pool types
     }

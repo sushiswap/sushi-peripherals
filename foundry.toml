@@ -9,3 +9,8 @@ remappings = [
     'libraries/=src/libraries',
     'interfaces/=src/interfaces',
 ]
+
+[etherscan]
+mainnet = { key = "${MAINNET_ETHERSCAN_KEY"}
+polygon = { key = "${POLYGON_ETHERSCAN_KEY"}
+optimism = { key = "${OPTIMISM_ETHERSCAN_KEY"}

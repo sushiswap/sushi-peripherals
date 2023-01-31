@@ -19,8 +19,8 @@ test-gas-report:
 	forge test -vv --gas-report
 trace:
 	forge test -vvvv
-remappings:
-	forge remappings > remappings.txt
+deploy-servers:
+	forge script ./script/DeployServer.s.sol --broadcast --slow --optimize --optimizer-runs 999999 --names --verify mainnet --rpc-url ${MAINNET_RPC_URL}
 
 playground: FOUNDRY_TEST:=playground
 playground:
@@ -28,8 +28,5 @@ playground:
 playground-trace: FOUNDRY_TEST:=playground
 playground-trace:
 	forge test --match-path playground/Playground.t.sol -vvvv --gas-report
-
-deploy-server:
-	forge script ./script/DeployServer.s.sol --broadcast --verify --rpc-url ${MAINNET_RPC_URL}
 
 .PHONY: test playground
