@@ -111,7 +111,7 @@ contract DeployServer is Script {
 
   function deployFantomServer() public {
     address minichef = constants.getAddress("fantom.minichef");
-    uint256 pid = 362;
+    uint256 pid = 349;
 
     EoaServer fantomServer = new EoaServer(pid, minichef, operator);
     fantomServer.transferOwnership(owner);
