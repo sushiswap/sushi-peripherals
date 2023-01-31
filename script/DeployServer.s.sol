@@ -11,6 +11,7 @@ import "chefs/servers/implementations/CeloOpticsServer.sol";
 import "chefs/servers/implementations/GnosisOmniServer.sol";
 import "chefs/servers/implementations/MetisServer.sol";
 import "chefs/servers/implementations/OptimismServer.sol";
+import "chefs/servers/implementations/EoaServer.sol";
 
 
 contract DeployServer is Script {
@@ -34,8 +35,15 @@ contract DeployServer is Script {
     deployGnosisServer();
     deployMetisServer();
     deployOptimismServer();
+    // EOA servers below
+    deployAvalancheServer();
+    deployFantomServer();
+    deployFuseServer();
+    deployMoonbeamServer();
+    deployMoonriverServer();
+    deployTelosServer();
   }
-  
+
   // indiviudal deployment functions for each deployed server
   // configured for individual network
   function deployArbitrumOneServer() public {
@@ -54,6 +62,14 @@ contract DeployServer is Script {
     
     ArbitrumServer novaServer = new ArbitrumServer(pid, minichef, bridgeAddr, operator);
     novaServer.transferOwnership(owner);
+  }
+  
+  function deployAvalancheServer() public {
+    address minichef = constants.getAddress("avalanche.minichef");
+    uint256 pid = 361;
+
+    EoaServer avaxServer = new EoaServer(pid, minichef, operator);
+    avaxServer.transferOwnership(owner);
   }
 
   function deployBttcServer() public {
@@ -93,6 +109,22 @@ contract DeployServer is Script {
     celoServer.transferOwnership(owner);
   }
 
+  function deployFantomServer() public {
+    address minichef = constants.getAddress("fantom.minichef");
+    uint256 pid = 362;
+
+    EoaServer fantomServer = new EoaServer(pid, minichef, operator);
+    fantomServer.transferOwnership(owner);
+  }
+
+  function deployFuseServer() public {
+    address minichef = constants.getAddress("fuse.minichef");
+    uint256 pid = 363;
+
+    EoaServer fuseServer = new EoaServer(pid, minichef, operator);
+    fuseServer.transferOwnership(owner);
+  }
+
   function deployGnosisServer() public {
     address minichef = constants.getAddress("gnosis.minichef");
     address omniBridge = 0x88ad09518695c6c3712AC10a214bE5109a655671;
@@ -120,6 +152,22 @@ contract DeployServer is Script {
     metisServer.transferOwnership(owner);
   }
 
+  function deployMoonbeamServer() public {
+    address minichef = constants.getAddress("moonbeam.minichef");
+    uint256 pid = 364;
+
+    EoaServer moonbeamServer = new EoaServer(pid, minichef, operator);
+    moonbeamServer.transferOwnership(owner);
+  }
+
+  function deployMoonriverServer() public {
+    address minichef = constants.getAddress("moonriver.minichef");
+    uint256 pid = 365;
+
+    EoaServer moonriverServer = new EoaServer(pid, minichef, operator);
+    moonriverServer.transferOwnership(owner);
+  }
+
   function deployOptimismServer() public {
     address minichef = constants.getAddress("optimism.minichef");
     address bridgeAddr = 0x99C9fc46f92E8a1c0deC1b1747d010903E884bE1;
@@ -139,6 +187,12 @@ contract DeployServer is Script {
     polygonServer.transferOwnership(owner);
   }
 
+  function deployTelosServer() public {
+    address minichef = constants.getAddress("telos.minichef");
+    uint256 pid = 366;
 
+    EoaServer telosServer = new EoaServer(pid, minichef, operator);
+    telosServer.transferOwnership(owner);
+  }
 }
 

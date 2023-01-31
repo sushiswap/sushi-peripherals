@@ -35,18 +35,18 @@ make test
 
 Arbitrum -> ArbitrumServer implementation
 Arbitrum Nova -> ArbitrumServer implementation
-Avalanche -> AvalancheCoreServer implementation
+Avalanche -> EoaServer implementation
 BitTorrent -> BitTorrentServer implementation
 Boba -> BobaGatewayServer implementation
-Boba Avax -> BobaGatewayServer implementation
-Boba BNB -> BobaGatewayServer implementation
 Bsc -> MultichainServer implementation
 Celo -> CeloServer implementation
-Fantom -> MultichainServer implementation
-Fuse -> FuseVoltageServer implementation
+Fantom -> EoaServer implementation
+Fuse -> EoaServer implementation
 Gnosis -> GnosisOmniServer implementation
 Kava -> MultichainServer implementation
 Metis -> MetisServer implementation
-MoonRiver -> MultichainServer implementation
+MoonBeam -> EoaServer implementation
+MoonRiver -> EoaServer implementation
 Optimism -> OptimisticServer implementation
 Polygon -> PolygonPosServer implementation
+Telos -> EoaServer implementation
