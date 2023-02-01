@@ -23,7 +23,12 @@ contract ArbitrumServer is BaseServer {
 
   error NotAuthorizedToBridge();
 
-  constructor(uint256 _pid, address _minichef, address _bridgeAddr, address _operatorAddr) BaseServer(_pid, _minichef) {
+  constructor(
+    uint256 _pid,
+    address _minichef,
+    address _bridgeAddr,
+    address _operatorAddr
+  ) BaseServer(_pid, _minichef) {
     bridgeAddr = _bridgeAddr;
     operatorAddr = _operatorAddr;
   }
@@ -33,12 +38,10 @@ contract ArbitrumServer is BaseServer {
   function _bridge(bytes calldata data) internal override {
     if (msg.sender != operatorAddr) revert NotAuthorizedToBridge();
 
-    (
-      address refundTo,
-      uint256 maxGas,
-      uint256 gasPriceBid,
-      bytes memory bridgeData
-    ) = abi.decode(data, (address, uint256, uint256, bytes));
+    (address refundTo, uint256 maxGas, uint256 gasPriceBid, bytes memory bridgeData) = abi.decode(
+      data,
+      (address, uint256, uint256, bytes)
+    );
 
     uint256 sushiBalance = sushi.balanceOf(address(this));
 

@@ -15,7 +15,6 @@ import "chefs/servers/implementations/MetisServer.sol";
 import "chefs/servers/implementations/OptimismServer.sol";
 import "chefs/servers/implementations/EoaServer.sol";
 
-
 contract DeployServer is Script {
   Constants internal constants;
   address owner = vm.envAddress("OWNER_ADDRESS");
@@ -51,7 +50,7 @@ contract DeployServer is Script {
     server = deployBscServer();
     dummyToken = new DummyToken("Bsc Dummy Token", "BSCDUMMY");
     dummyToken.transfer(server, 1);
-    
+
     server = deployKavaServer();
     dummyToken = new DummyToken("Kava Dummy Token", "KAVADUMMY");
     dummyToken.transfer(server, 1);
@@ -59,12 +58,12 @@ contract DeployServer is Script {
     server = deployMetisServer();
     dummyToken = new DummyToken("Metis Dummy Token", "METISDUMMY");
     dummyToken.transfer(server, 1);
-    
+
     /*
     server = deployOptimismServer();
     dummyToken = new DummyToken("OP Dummy Token", "OPDUMMY");
     dummyToken.transfer(server, 1);*/
-    
+
     // EOA servers below
     //server = deployAvalancheServer();
     //server = deployFantomServer();
@@ -87,16 +86,16 @@ contract DeployServer is Script {
     return address(arbiServer);
   }
 
-  function deployArbitrumNovaServer() public returns (address){
+  function deployArbitrumNovaServer() public returns (address) {
     address minichef = constants.getAddress("nova.minichef");
     address bridgeAddr = 0xC840838Bc438d73C16c2f8b22D2Ce3669963cD48;
     uint256 pid = 355;
-    
+
     ArbitrumServer novaServer = new ArbitrumServer(pid, minichef, bridgeAddr, operator);
     novaServer.transferOwnership(owner);
     return address(novaServer);
   }
-  
+
   function deployAvalancheServer() public returns (address) {
     address minichef = constants.getAddress("avalanche.minichef");
     uint256 pid = 361;
@@ -144,7 +143,7 @@ contract DeployServer is Script {
 
     CeloOpticsServer celoServer = new CeloOpticsServer(pid, minichef, opticsBridgeV2);
     celoServer.transferOwnership(owner);
-    return address(celoServer); 
+    return address(celoServer);
   }
 
   function deployFantomServer() public returns (address) {
@@ -189,7 +188,7 @@ contract DeployServer is Script {
     address minichef = constants.getAddress("metis.minichef");
     address bridgeAddr = 0x3980c9ed79d2c191A89E02Fa3529C60eD6e9c04b;
     uint256 pid = 360;
-    
+
     MetisServer metisServer = new MetisServer(pid, minichef, bridgeAddr, operator);
     metisServer.transferOwnership(owner);
     return address(metisServer);
@@ -243,4 +242,3 @@ contract DeployServer is Script {
     return address(telosServer);
   }
 }
-

@@ -28,7 +28,7 @@ contract TridentMakeTest is BaseTest {
 
     pair0 = IPool(0x846Fea3D94976ef9862040d9FbA9C391Aa75A44B); //wmatic-usdc 0.05%
     pair1 = IPool(0x231BA46173b75E4D7cEa6DCE095A6c1c3E876270); //usdc-usdt 0.01%
-    ERC20 pairToken0 = ERC20(0x846Fea3D94976ef9862040d9FbA9C391Aa75A44B); //wmatic-usdc 0.05% 
+    ERC20 pairToken0 = ERC20(0x846Fea3D94976ef9862040d9FbA9C391Aa75A44B); //wmatic-usdc 0.05%
     ERC20 pairToken1 = ERC20(0x231BA46173b75E4D7cEa6DCE095A6c1c3E876270); //usdc-usdt 0.01%
 
     // deploy TridentMaker
@@ -162,7 +162,7 @@ contract TridentMakeTest is BaseTest {
   function testWithdraw() public {
     ERC20 pairToken0 = ERC20(address(pair0));
     uint256 pairToken0Amount = pairToken0.balanceOf(address(tridentMaker));
-  
+
     tridentMaker.withdraw(address(pair0), address(alice), pairToken0Amount);
     assertEq(pairToken0.balanceOf(address(alice)), pairToken0Amount);
     assertEq(pairToken0.balanceOf(address(tridentMaker)), 0);

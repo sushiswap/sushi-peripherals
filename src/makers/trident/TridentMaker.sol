@@ -7,7 +7,7 @@ import "solmate/tokens/ERC20.sol";
 
 /// @notice Contract for withdrawing Trident LP positions
 /// @dev Can set tokenFeeTo to serve fees to set addresses with serveFees
-contract TridentMaker is TridentUnwindooor { 
+contract TridentMaker is TridentUnwindooor {
   IBentoBoxV1 public immutable bentoBox;
   mapping(address => address) public tokenFeeTo;
 
@@ -72,7 +72,11 @@ contract TridentMaker is TridentUnwindooor {
   /// @param token address of token to withdraw
   /// @param to address to send tokens to
   /// @param _value amount of tokens to withdraw
-  function withdraw(address token, address to, uint256 _value) onlyOwner external {
+  function withdraw(
+    address token,
+    address to,
+    uint256 _value
+  ) external onlyOwner {
     if (token != address(0)) {
       _safeTransfer(token, to, _value);
     } else {
@@ -81,12 +85,17 @@ contract TridentMaker is TridentUnwindooor {
     }
     emit Withdrawn(token, to, _value);
   }
-  
+
   // Do any action
   ///@dev onlyOwner call to perform any action, can be used for emergencies or performing operations not supported thru contract
-  function doAction(address to, uint256 _value, bytes memory data) onlyOwner external {
+  function doAction(
+    address to,
+    uint256 _value,
+    bytes memory data
+  ) external onlyOwner {
     (bool success, ) = to.call{value: _value}(data);
     require(success);
   }
+
   receive() external payable {}
 }

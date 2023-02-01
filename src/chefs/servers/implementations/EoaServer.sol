@@ -4,7 +4,7 @@ pragma solidity >=0.8.0;
 import "../BaseServer.sol";
 
 interface BasicERC20 {
-    function transfer(address recipient, uint256 amount) external returns (bool);
+  function transfer(address recipient, uint256 amount) external returns (bool);
 }
 
 /// @notice Contract that stakes dummy tokens to accumulate sushi for an EOA to transfer to alternate chain
@@ -12,7 +12,11 @@ interface BasicERC20 {
 contract EoaServer is BaseServer {
   address operatorAddr;
 
-  constructor(uint256 _pid, address _minichef, address _operatorAddr) BaseServer(_pid, _minichef) {
+  constructor(
+    uint256 _pid,
+    address _minichef,
+    address _operatorAddr
+  ) BaseServer(_pid, _minichef) {
     operatorAddr = _operatorAddr;
   }
 
@@ -30,4 +34,3 @@ contract EoaServer is BaseServer {
     operatorAddr = newAddy;
   }
 }
-

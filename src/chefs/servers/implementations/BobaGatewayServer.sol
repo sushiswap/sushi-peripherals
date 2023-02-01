@@ -21,7 +21,12 @@ contract BobaGatewayServer is BaseServer {
 
   error NotAuthorizedToBridge();
 
-  constructor(uint256 _pid, address _minichef, address _gatewayAddr, address _operatorAddr) BaseServer(_pid, _minichef) {
+  constructor(
+    uint256 _pid,
+    address _minichef,
+    address _gatewayAddr,
+    address _operatorAddr
+  ) BaseServer(_pid, _minichef) {
     gatewayAddr = _gatewayAddr;
     operatorAddr = _operatorAddr;
   }
@@ -31,20 +36,10 @@ contract BobaGatewayServer is BaseServer {
   function _bridge(bytes calldata data) internal override {
     if (msg.sender != operatorAddr) revert NotAuthorizedToBridge();
 
-    (
-      address l2Token,
-      uint32 l2Gas,
-      bytes memory bridgeData
-    ) = abi.decode(data, (address, uint32, bytes));
+    (address l2Token, uint32 l2Gas, bytes memory bridgeData) = abi.decode(data, (address, uint32, bytes));
 
     uint256 sushiBalance = sushi.balanceOf(address(this));
-    IGatewayBridge(gatewayAddr).depositERC20(
-      address(sushi),
-      l2Token,
-      sushiBalance,
-      l2Gas,
-      bridgeData
-    );
+    IGatewayBridge(gatewayAddr).depositERC20(address(sushi), l2Token, sushiBalance, l2Gas, bridgeData);
 
     emit BridgedSushi(minichef, sushiBalance);
   }
@@ -54,4 +49,3 @@ contract BobaGatewayServer is BaseServer {
     operatorAddr = newAddy;
   }
 }
-

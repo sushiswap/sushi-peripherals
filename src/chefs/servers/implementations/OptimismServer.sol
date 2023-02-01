@@ -4,7 +4,7 @@ pragma solidity >=0.8.0;
 import "../BaseServer.sol";
 
 interface IOptimismBridge {
-  function depositERC20 (
+  function depositERC20(
     address _l1Token,
     address _l2Token,
     uint256 _amount,
@@ -21,7 +21,12 @@ contract OptimismServer is BaseServer {
 
   error NotAuthorizedToBridge();
 
-  constructor(uint256 _pid, address _minichef, address _bridgeAddr, address _operatorAddr) BaseServer(_pid, _minichef) {
+  constructor(
+    uint256 _pid,
+    address _minichef,
+    address _bridgeAddr,
+    address _operatorAddr
+  ) BaseServer(_pid, _minichef) {
     bridgeAddr = _bridgeAddr;
     operatorAddr = _operatorAddr;
   }
@@ -31,20 +36,10 @@ contract OptimismServer is BaseServer {
   function _bridge(bytes calldata data) internal override {
     if (msg.sender != operatorAddr) revert NotAuthorizedToBridge();
 
-    (
-      address l2Token,
-      uint32 l2Gas,
-      bytes memory bridgeData
-    ) = abi.decode(data, (address, uint32, bytes));
+    (address l2Token, uint32 l2Gas, bytes memory bridgeData) = abi.decode(data, (address, uint32, bytes));
 
     uint256 sushiBalance = sushi.balanceOf(address(this));
-    IOptimismBridge(bridgeAddr).depositERC20(
-      address(sushi),
-      l2Token,
-      sushiBalance,
-      l2Gas,
-      bridgeData
-    );
+    IOptimismBridge(bridgeAddr).depositERC20(address(sushi), l2Token, sushiBalance, l2Gas, bridgeData);
 
     emit BridgedSushi(minichef, sushiBalance);
   }
