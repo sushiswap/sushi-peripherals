@@ -44,7 +44,7 @@ abstract contract BaseServer is Ownable {
   // Perform harvest and bridge
   /// @dev harvests from MasterChefV1 and bridges to implemented network
   /// @param data bytes to be passed to _bridge(bytes calldata data) method, will be 0x0 for most
-  function harvestAndBridge(bytes calldata data) public {
+  function harvestAndBridge(bytes calldata data) public payable {
     masterchefV1.withdraw(pid, 0);
     bridge(data);
     emit Harvested(pid);
@@ -96,7 +96,7 @@ abstract contract BaseServer is Ownable {
   // Bridge Sushi
   /// @dev bridges Sushi to alternate chain via implemented _bridge call
   /// @param data bytes to be passed to _bridge(bytes calldata data) method, will be 0x0 for most
-  function bridge(bytes calldata data) public {
+  function bridge(bytes calldata data) public payable {
     if (bridgeAdapter == address(this)) {
       _bridge(data);
     } else {

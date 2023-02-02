@@ -18,7 +18,8 @@ interface IArbitrumBridge {
 /// @notice Contract bridges Sushi to arbitrum chains using their official bridge
 /// @dev takes an operator address in constructor to guard _bridge call
 contract ArbitrumServer is BaseServer {
-  address public bridgeAddr;
+  address public routerAddr;
+  address public gatewayAddr;
   address public operatorAddr;
 
   error NotAuthorizedToBridge();
@@ -26,10 +27,12 @@ contract ArbitrumServer is BaseServer {
   constructor(
     uint256 _pid,
     address _minichef,
-    address _bridgeAddr,
+    address _routerAddr,
+    address _gatewayAddr,
     address _operatorAddr
   ) BaseServer(_pid, _minichef) {
-    bridgeAddr = _bridgeAddr;
+    routerAddr = _routerAddr;
+    gatewayAddr = _gatewayAddr;
     operatorAddr = _operatorAddr;
   }
 
@@ -45,8 +48,8 @@ contract ArbitrumServer is BaseServer {
 
     uint256 sushiBalance = sushi.balanceOf(address(this));
 
-    sushi.approve(bridgeAddr, sushiBalance);
-    IArbitrumBridge(bridgeAddr).outboundTransferCustomRefund(
+    sushi.approve(gatewayAddr, sushiBalance);
+    IArbitrumBridge(routerAddr).outboundTransferCustomRefund{value: msg.value}(
       address(sushi),
       refundTo,
       minichef,

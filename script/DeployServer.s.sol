@@ -35,7 +35,7 @@ contract DeployServer is Script {
 
     server = deployArbitrumOneServer();
 
-    server = deployArbitrumNovaServer();
+    /*server = deployArbitrumNovaServer();
     dummyToken = new DummyToken("Nova Dummy Token", "NOVADUMMY");
     dummyToken.transfer(server, 1);
 
@@ -59,10 +59,10 @@ contract DeployServer is Script {
     dummyToken = new DummyToken("Metis Dummy Token", "METISDUMMY");
     dummyToken.transfer(server, 1);
 
-    /*
     server = deployOptimismServer();
     dummyToken = new DummyToken("OP Dummy Token", "OPDUMMY");
-    dummyToken.transfer(server, 1);*/
+    dummyToken.transfer(server, 1);
+    */
 
     // EOA servers below
     //server = deployAvalancheServer();
@@ -78,20 +78,22 @@ contract DeployServer is Script {
   // configured for individual network
   function deployArbitrumOneServer() public returns (address) {
     address minichef = constants.getAddress("arbitrum.minichef");
-    address bridgeAddr = 0x72Ce9c846789fdB6fC1f34aC4AD25Dd9ef7031ef;
+    address routerAddr = 0x72Ce9c846789fdB6fC1f34aC4AD25Dd9ef7031ef;
+    address gatewayAddr = 0xa3A7B6F88361F48403514059F1F16C8E78d60EeC;
     uint256 pid = 350;
 
-    ArbitrumServer arbiServer = new ArbitrumServer(pid, minichef, bridgeAddr, operator);
+    ArbitrumServer arbiServer = new ArbitrumServer(pid, minichef, routerAddr, gatewayAddr, operator);
     arbiServer.transferOwnership(owner);
     return address(arbiServer);
   }
 
   function deployArbitrumNovaServer() public returns (address) {
     address minichef = constants.getAddress("nova.minichef");
-    address bridgeAddr = 0xC840838Bc438d73C16c2f8b22D2Ce3669963cD48;
+    address routerAddr = 0xC840838Bc438d73C16c2f8b22D2Ce3669963cD48;
+    address gatewayAddr = 0xB2535b988dcE19f9D71dfB22dB6da744aCac21bf;
     uint256 pid = 355;
 
-    ArbitrumServer novaServer = new ArbitrumServer(pid, minichef, bridgeAddr, operator);
+    ArbitrumServer novaServer = new ArbitrumServer(pid, minichef, routerAddr, gatewayAddr, operator);
     novaServer.transferOwnership(owner);
     return address(novaServer);
   }
