@@ -4,9 +4,10 @@ pragma solidity >=0.8.0;
 import "../BaseServer.sol";
 
 interface IGatewayBridge {
-  function depositERC20(
+  function depositERC20To(
     address _l1Token,
     address _l2Token,
+    address _to,
     uint256 _amount,
     uint32 _l2Gas,
     bytes calldata _data
@@ -39,7 +40,8 @@ contract BobaGatewayServer is BaseServer {
     (address l2Token, uint32 l2Gas, bytes memory bridgeData) = abi.decode(data, (address, uint32, bytes));
 
     uint256 sushiBalance = sushi.balanceOf(address(this));
-    IGatewayBridge(gatewayAddr).depositERC20(address(sushi), l2Token, sushiBalance, l2Gas, bridgeData);
+    sushi.approve(gatewayAddr, sushiBalance);
+    IGatewayBridge(gatewayAddr).depositERC20To(address(sushi), l2Token, minichef, sushiBalance, l2Gas, bridgeData);
 
     emit BridgedSushi(minichef, sushiBalance);
   }
