@@ -7,12 +7,10 @@ import "utils/Constants.sol";
 import "chefs/servers/DummyToken.sol";
 import "chefs/servers/implementations/ArbitrumServer.sol";
 import "chefs/servers/implementations/PosServer.sol";
-import "chefs/servers/implementations/BobaGatewayServer.sol";
+import "chefs/servers/implementations/OpStyleServer.sol";
 import "chefs/servers/implementations/MultichainServer.sol";
 import "chefs/servers/implementations/CeloOpticsServer.sol";
 import "chefs/servers/implementations/GnosisOmniServer.sol";
-import "chefs/servers/implementations/MetisServer.sol";
-import "chefs/servers/implementations/OptimismServer.sol";
 import "chefs/servers/implementations/EoaServer.sol";
 
 contract DeployServer is Script {
@@ -121,9 +119,10 @@ contract DeployServer is Script {
   function deployBobaServer() public returns (address) {
     address minichef = constants.getAddress("boba.minichef");
     address bridgeAddr = 0xdc1664458d2f0B6090bEa60A8793A4E66c2F1c00;
+    address l2Token = 0x5fFccc55C0d2fd6D3AC32C26C020B3267e933F1b;
     uint256 pid = 357;
 
-    BobaGatewayServer bobaServer = new BobaGatewayServer(pid, minichef, bridgeAddr, operator);
+    OpStyleServer bobaServer = new OpStyleServer(pid, minichef, bridgeAddr, l2Token, operator);
     bobaServer.transferOwnership(owner);
     return address(bobaServer);
   }
@@ -189,9 +188,10 @@ contract DeployServer is Script {
   function deployMetisServer() public returns (address) {
     address minichef = constants.getAddress("metis.minichef");
     address bridgeAddr = 0x3980c9ed79d2c191A89E02Fa3529C60eD6e9c04b;
+    address l2Token = 0x17Ee7E4dA37B01FC1bcc908fA63DF343F23B4B7C;
     uint256 pid = 360;
 
-    MetisServer metisServer = new MetisServer(pid, minichef, bridgeAddr, operator);
+    OpStyleServer metisServer = new OpStyleServer(pid, minichef, bridgeAddr, l2Token, operator);
     metisServer.transferOwnership(owner);
     return address(metisServer);
   }
@@ -217,9 +217,10 @@ contract DeployServer is Script {
   function deployOptimismServer() public returns (address) {
     address minichef = constants.getAddress("optimism.minichef");
     address bridgeAddr = 0x99C9fc46f92E8a1c0deC1b1747d010903E884bE1;
+    address l2Token = 0x3eaEb77b03dBc0F6321AE1b72b2E9aDb0F60112B;
     uint256 pid = 361;
 
-    OptimismServer optimismServer = new OptimismServer(pid, minichef, bridgeAddr, operator);
+    OpStyleServer optimismServer = new OpStyleServer(pid, minichef, bridgeAddr, l2Token, operator);
     optimismServer.transferOwnership(owner);
     return address(optimismServer);
   }

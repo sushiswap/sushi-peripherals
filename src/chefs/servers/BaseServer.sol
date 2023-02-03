@@ -50,6 +50,11 @@ abstract contract BaseServer is Ownable {
     emit Harvested(pid);
   }
 
+  function harvest() public {
+    masterchefV1.withdraw(pid, 0);
+    emit Harvested(pid);
+  }
+
   // Withdraw DummyToken from MasterChefV1
   /// @dev withdraws dummy token, used for harvesting Sushi, from MasterChefV1
   function withdraw() public onlyOwner {
