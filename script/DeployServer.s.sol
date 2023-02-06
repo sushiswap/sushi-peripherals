@@ -80,7 +80,7 @@ contract DeployServer is Script {
     address gatewayAddr = 0xa3A7B6F88361F48403514059F1F16C8E78d60EeC;
     uint256 pid = 350;
 
-    ArbitrumServer arbiServer = new ArbitrumServer(pid, minichef, routerAddr, gatewayAddr, operator);
+    ArbitrumServer arbiServer = new ArbitrumServer(pid, minichef, routerAddr, gatewayAddr);
     arbiServer.transferOwnership(owner);
     return address(arbiServer);
   }
@@ -91,7 +91,7 @@ contract DeployServer is Script {
     address gatewayAddr = 0xB2535b988dcE19f9D71dfB22dB6da744aCac21bf;
     uint256 pid = 355;
 
-    ArbitrumServer novaServer = new ArbitrumServer(pid, minichef, routerAddr, gatewayAddr, operator);
+    ArbitrumServer novaServer = new ArbitrumServer(pid, minichef, routerAddr, gatewayAddr);
     novaServer.transferOwnership(owner);
     return address(novaServer);
   }
@@ -122,7 +122,7 @@ contract DeployServer is Script {
     address l2Token = 0x5fFccc55C0d2fd6D3AC32C26C020B3267e933F1b;
     uint256 pid = 357;
 
-    OpStyleServer bobaServer = new OpStyleServer(pid, minichef, bridgeAddr, l2Token, operator);
+    OpStyleServer bobaServer = new OpStyleServer(pid, minichef, bridgeAddr, l2Token);
     bobaServer.transferOwnership(owner);
     return address(bobaServer);
   }
@@ -191,7 +191,7 @@ contract DeployServer is Script {
     address l2Token = 0x17Ee7E4dA37B01FC1bcc908fA63DF343F23B4B7C;
     uint256 pid = 360;
 
-    OpStyleServer metisServer = new OpStyleServer(pid, minichef, bridgeAddr, l2Token, operator);
+    OpStyleServer metisServer = new OpStyleServer(pid, minichef, bridgeAddr, l2Token);
     metisServer.transferOwnership(owner);
     return address(metisServer);
   }
@@ -220,7 +220,7 @@ contract DeployServer is Script {
     address l2Token = 0x3eaEb77b03dBc0F6321AE1b72b2E9aDb0F60112B;
     uint256 pid = 361;
 
-    OpStyleServer optimismServer = new OpStyleServer(pid, minichef, bridgeAddr, l2Token, operator);
+    OpStyleServer optimismServer = new OpStyleServer(pid, minichef, bridgeAddr, l2Token);
     optimismServer.transferOwnership(owner);
     return address(optimismServer);
   }

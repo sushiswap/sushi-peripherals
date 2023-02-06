@@ -16,11 +16,10 @@ interface IArbitrumBridge {
 }
 
 /// @notice Contract bridges Sushi to arbitrum chains using their official bridge
-/// @dev takes an operator address in constructor to guard _bridge call
+/// @dev requires routerAddr and gatewayAddr to be set in the constructor
 contract ArbitrumServer is BaseServer {
   address public routerAddr;
   address public gatewayAddr;
-  address public operatorAddr;
 
   error NotAuthorizedToBridge();
 
@@ -28,19 +27,15 @@ contract ArbitrumServer is BaseServer {
     uint256 _pid,
     address _minichef,
     address _routerAddr,
-    address _gatewayAddr,
-    address _operatorAddr
+    address _gatewayAddr
   ) BaseServer(_pid, _minichef) {
     routerAddr = _routerAddr;
     gatewayAddr = _gatewayAddr;
-    operatorAddr = _operatorAddr;
   }
 
   /// @dev internal bridge call
   /// @param data is used: address refundTo, uint256 maxGas, uint256 gasPriceBid, bytes bridgeData
   function _bridge(bytes calldata data) internal override {
-    if (msg.sender != operatorAddr) revert NotAuthorizedToBridge();
-
     (address refundTo, uint256 maxGas, uint256 gasPriceBid, bytes memory bridgeData) = abi.decode(
       data,
       (address, uint256, uint256, bytes)
@@ -60,10 +55,5 @@ contract ArbitrumServer is BaseServer {
     );
 
     emit BridgedSushi(minichef, sushiBalance);
-  }
-
-  /// @dev set operator address, to guard _bridge call
-  function setOperatorAddr(address newAddy) external onlyOwner {
-    operatorAddr = newAddy;
   }
 }
