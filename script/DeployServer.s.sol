@@ -17,7 +17,7 @@ contract DeployServer is Script {
   Constants internal constants;
   address owner = vm.envAddress("OWNER_ADDRESS");
   address operator = vm.envAddress("OPERATOR_ADDRESS");
-  address anyswapRouter = 0x765277EebeCA2e31912C9946eAe1021199B39C61;
+  address anyswapRouter = 0x765277EebeCA2e31912C9946eAe1021199B39C61; //v4
 
   function run() external {
     constants = new Constants();
@@ -31,27 +31,27 @@ contract DeployServer is Script {
     //deployCeloServer(); - using old
     //deployGnosisServer(); - using old
 
-    //server = deployArbitrumOneServer();
+    server = deployArbitrumOneServer();
 
-    /*server = deployArbitrumNovaServer();
+    server = deployArbitrumNovaServer();
     dummyToken = new DummyToken("Nova Dummy Token", "NOVADUMMY");
-    dummyToken.transfer(server, 1);*/
+    dummyToken.transfer(server, 1);
 
     /*server = deployBttcServer();
     dummyToken = new DummyToken("Bttc Dummy Token", "BTTCDUMMY");
     dummyToken.transfer(server, 1);*/
 
-    /*server = deployBobaServer();
+    server = deployBobaServer();
     dummyToken = new DummyToken("Boba Dummy Token", "BOBADUMMY");
     dummyToken.transfer(server, 1);
 
-    /*server = deployBscServer();
+    server = deployBscServer();
     dummyToken = new DummyToken("Bsc Dummy Token", "BSCDUMMY");
     dummyToken.transfer(server, 1);
 
     server = deployKavaServer();
     dummyToken = new DummyToken("Kava Dummy Token", "KAVADUMMY");
-    dummyToken.transfer(server, 1);*/
+    dummyToken.transfer(server, 1);
 
     server = deployMetisServer();
     dummyToken = new DummyToken("Metis Dummy Token", "METISDUMMY");
@@ -59,8 +59,7 @@ contract DeployServer is Script {
 
     /*server = deployOptimismServer();
     dummyToken = new DummyToken("OP Dummy Token", "OPDUMMY");
-    dummyToken.transfer(server, 1);
-    */
+    dummyToken.transfer(server, 1);*/
 
     // EOA servers below
     //server = deployAvalancheServer();
@@ -129,10 +128,11 @@ contract DeployServer is Script {
 
   function deployBscServer() public returns (address) {
     address minichef = constants.getAddress("bsc.minichef");
+    address anySushiAddr = 0xA5432cbF7097C4E3536731dEc837e3fA676b38C3;
     uint256 chainId = 56;
     uint256 pid = 358;
 
-    MultichainServer bscServer = new MultichainServer(pid, minichef, chainId, anyswapRouter);
+    MultichainServer bscServer = new MultichainServer(pid, minichef, chainId, anyswapRouter, anySushiAddr);
     bscServer.transferOwnership(owner);
     return address(bscServer);
   }
@@ -177,10 +177,11 @@ contract DeployServer is Script {
 
   function deployKavaServer() public returns (address) {
     address minichef = constants.getAddress("kava.minichef");
+    address anySushiAddr = 0xA5432cbF7097C4E3536731dEc837e3fA676b38C3;
     uint256 chainId = 2222;
     uint256 pid = 359;
 
-    MultichainServer kavaServer = new MultichainServer(pid, minichef, chainId, anyswapRouter);
+    MultichainServer kavaServer = new MultichainServer(pid, minichef, chainId, anyswapRouter, anySushiAddr);
     kavaServer.transferOwnership(owner);
     return address(kavaServer);
   }

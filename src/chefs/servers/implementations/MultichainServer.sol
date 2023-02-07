@@ -16,16 +16,19 @@ interface IMultichainBridge {
 /// @dev uses multichain router w/ destination chainId and routerAddr set in the constructor
 contract MultichainServer is BaseServer {
   address public routerAddr;
+  address public anySushiAddr;
   uint256 public immutable chainId;
 
   constructor(
     uint256 _pid,
     address _minichef,
     uint256 _chainId,
-    address _routerAddr
+    address _routerAddr,
+    address _anySushiAddr
   ) BaseServer(_pid, _minichef) {
     chainId = _chainId;
     routerAddr = _routerAddr;
+    anySushiAddr = _anySushiAddr;
   }
 
   /// @dev internal bridge call
@@ -34,8 +37,18 @@ contract MultichainServer is BaseServer {
     uint256 sushiBalance = sushi.balanceOf(address(this));
 
     sushi.approve(routerAddr, sushiBalance);
-    IMultichainBridge(routerAddr).anySwapOutUnderlying(address(sushi), minichef, sushiBalance, chainId);
+    IMultichainBridge(routerAddr).anySwapOutUnderlying(anySushiAddr, minichef, sushiBalance, chainId);
 
     emit BridgedSushi(minichef, sushiBalance);
+  }
+
+  /// @dev change anySushiAddr
+  function setAnySushiAddr(address _anySushiAddr) external onlyOwner {
+    anySushiAddr = _anySushiAddr;
+  }
+
+  /// @dev change anyRouterAddr
+  function setRouterAddr(address _routerAddr) external onlyOwner {
+    routerAddr = _routerAddr;
   }
 }

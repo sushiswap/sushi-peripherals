@@ -20,7 +20,7 @@ test-gas-report:
 trace:
 	forge test -vvvv
 deploy-servers:
-	forge script ./script/DeployServer.s.sol --broadcast --slow --optimize --optimizer-runs 999999 --names --verify mainnet --rpc-url ${MAINNET_RPC_URL}
+	forge script ./script/DeployServer.s.sol --broadcast --slow --optimize --optimizer-runs 999999 --names --verify --rpc-url ${MAINNET_RPC_URL}
 
 playground: FOUNDRY_TEST:=playground
 playground:
