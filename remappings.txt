@@ -11,3 +11,4 @@ interfaces/=src/interfaces/
 libraries/=src/libraries/
 chefs/=src/chefs
 makers/=src/makers
+auths/=src/auths

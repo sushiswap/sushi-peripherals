@@ -21,6 +21,8 @@ trace:
 	forge test -vvvv
 deploy-servers:
 	forge script ./script/DeployServer.s.sol --broadcast --slow --optimize --optimizer-runs 999999 --names --verify --rpc-url ${MAINNET_RPC_URL}
+deploy-ownedMulticall:
+	forge script ./script/DeployOwnedMulticall.s.sol --broadcast --slow --optimize --optimizer-runs 999999 --names --verify --rpc-url ${MAINNET_RPC_URL}
 
 playground: FOUNDRY_TEST:=playground
 playground:

@@ -31,11 +31,11 @@ contract DeployServer is Script {
     //deployCeloServer(); - using old
     //deployGnosisServer(); - using old
 
-    server = deployArbitrumOneServer();
+    //server = deployArbitrumOneServer();
 
-    server = deployArbitrumNovaServer();
+    /*server = deployArbitrumNovaServer();
     dummyToken = new DummyToken("Nova Dummy Token", "NOVADUMMY");
-    dummyToken.transfer(server, 1);
+    dummyToken.transfer(server, 1);*/
 
     /*server = deployBttcServer();
     dummyToken = new DummyToken("Bttc Dummy Token", "BTTCDUMMY");
@@ -45,21 +45,22 @@ contract DeployServer is Script {
     dummyToken = new DummyToken("Boba Dummy Token", "BOBADUMMY");
     dummyToken.transfer(server, 1);
 
-    server = deployBscServer();
+    /*server = deployBscServer();
     dummyToken = new DummyToken("Bsc Dummy Token", "BSCDUMMY");
-    dummyToken.transfer(server, 1);
+    dummyToken.transfer(server, 1);*/
 
+    /*
     server = deployKavaServer();
     dummyToken = new DummyToken("Kava Dummy Token", "KAVADUMMY");
-    dummyToken.transfer(server, 1);
+    dummyToken.transfer(server, 1);*/
 
     server = deployMetisServer();
     dummyToken = new DummyToken("Metis Dummy Token", "METISDUMMY");
     dummyToken.transfer(server, 1);
 
-    /*server = deployOptimismServer();
+    server = deployOptimismServer();
     dummyToken = new DummyToken("OP Dummy Token", "OPDUMMY");
-    dummyToken.transfer(server, 1);*/
+    dummyToken.transfer(server, 1);
 
     // EOA servers below
     //server = deployAvalancheServer();

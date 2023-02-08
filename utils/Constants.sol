@@ -63,6 +63,7 @@ contract Constants {
     setAddress("gnosis.minichef", 0xdDCbf776dF3dE60163066A5ddDF2277cB445E0F3);
     setAddress("kava.minichef", 0xf731202A3cf7EfA9368C2d7bD613926f7A144dB5);
     setAddress("metis.minichef", 0x1334c8e873E1cae8467156e2A81d1C8b566B2da1);
+    setAddress("optimism.minichef", 0x5219C5E32b9FFf87F29d5A833832c29134464aaa);
     //setAddress("moonbeam.minichef", );
     setAddress("moonriver.minichef", 0x3dB01570D97631f69bbb0ba39796865456Cf89A5);
     //setAddress("optimism.minichef", );

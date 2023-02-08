@@ -3,7 +3,7 @@ pragma solidity >=0.8.0;
 
 import "solmate/auth/Owned.sol";
 import "interfaces/IPool.sol";
-import "interfaces/Auth.sol";
+import "auths/Auth.sol";
 
 /// @notice Contract for breaking down LP positions
 /// @dev Built in mind for Trident LP positions (stable and constant product)
