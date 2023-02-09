@@ -9,6 +9,7 @@ remappings = [
     'libraries/=src/libraries',
     'interfaces/=src/interfaces',
 ]
+sparse_mode = true
 
 [etherscan]
 mainnet = { key = "${MAINNET_ETHERSCAN_KEY"}

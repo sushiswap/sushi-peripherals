@@ -6,7 +6,7 @@ SCRIPT_DIR = ./script
 TEST_DIR = ./test
 
 build:
-	forge build
+	forge build --skip .old.sol
 rebuild: clean build
 install: init
 init:
