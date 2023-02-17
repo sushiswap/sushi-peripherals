@@ -89,7 +89,7 @@ contract DeployServer is Script {
     address minichef = constants.getAddress("nova.minichef");
     address routerAddr = 0xC840838Bc438d73C16c2f8b22D2Ce3669963cD48;
     address gatewayAddr = 0xB2535b988dcE19f9D71dfB22dB6da744aCac21bf;
-    uint256 pid = 355;
+    uint256 pid = 356;
 
     ArbitrumServer novaServer = new ArbitrumServer(pid, minichef, routerAddr, gatewayAddr, operator);
     novaServer.transferOwnership(owner);
@@ -109,7 +109,7 @@ contract DeployServer is Script {
     address minichef = constants.getAddress("bttc.minichef");
     address posManager = 0xD06029b23e9d4CD24bAd01d436837Fa02B8f0dd9;
     address ercBridge = 0x89a93F94C0a3f388930C4A568430F5e8fFFfd3eC;
-    uint256 pid = 356;
+    uint256 pid = 360;
 
     PosServer bttcServer = new PosServer(pid, minichef, posManager, ercBridge);
     bttcServer.transferOwnership(owner);
@@ -120,7 +120,7 @@ contract DeployServer is Script {
     address minichef = constants.getAddress("boba.minichef");
     address bridgeAddr = 0xdc1664458d2f0B6090bEa60A8793A4E66c2F1c00;
     address l2Token = 0x5fFccc55C0d2fd6D3AC32C26C020B3267e933F1b;
-    uint256 pid = 357;
+    uint256 pid = 358;
 
     OpStyleServer bobaServer = new OpStyleServer(pid, minichef, bridgeAddr, l2Token, operator);
     bobaServer.transferOwnership(owner);
@@ -131,7 +131,7 @@ contract DeployServer is Script {
     address minichef = constants.getAddress("bsc.minichef");
     address anySushiAddr = 0xA5432cbF7097C4E3536731dEc837e3fA676b38C3;
     uint256 chainId = 56;
-    uint256 pid = 358;
+    uint256 pid = 359;
 
     MultichainServer bscServer = new MultichainServer(pid, minichef, chainId, anyswapRouter, anySushiAddr);
     bscServer.transferOwnership(owner);
@@ -180,7 +180,7 @@ contract DeployServer is Script {
     address minichef = constants.getAddress("kava.minichef");
     address anySushiAddr = 0xA5432cbF7097C4E3536731dEc837e3fA676b38C3;
     uint256 chainId = 2222;
-    uint256 pid = 359;
+    uint256 pid = 355;
 
     MultichainServer kavaServer = new MultichainServer(pid, minichef, chainId, anyswapRouter, anySushiAddr);
     kavaServer.transferOwnership(owner);
@@ -191,7 +191,7 @@ contract DeployServer is Script {
     address minichef = constants.getAddress("metis.minichef");
     address bridgeAddr = 0x3980c9ed79d2c191A89E02Fa3529C60eD6e9c04b;
     address l2Token = 0x17Ee7E4dA37B01FC1bcc908fA63DF343F23B4B7C;
-    uint256 pid = 360;
+    uint256 pid = 357;
 
     OpStyleServer metisServer = new OpStyleServer(pid, minichef, bridgeAddr, l2Token, operator);
     metisServer.transferOwnership(owner);
