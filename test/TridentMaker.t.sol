@@ -57,27 +57,27 @@ contract TridentMakeTest is BaseTest {
 
     address[] memory pairs = new address[](1);
     uint256[] memory amounts = new uint256[](1);
-    bool[] memory keepTokens0 = new bool[](1);
+    address[] memory keepTokens = new address[](1);
     uint256[] memory minAmounts = new uint256[](1);
     pairs[0] = address(pair0);
     amounts[0] = 1 gwei;
-    keepTokens0[0] = true;
+    keepTokens[0] = address(token0);
     minAmounts[0] = 0; // no slippage protection
 
-    tridentMaker.burnSinglePairs(pairs, amounts, keepTokens0, minAmounts);
+    tridentMaker.burnSinglePairs(pairs, amounts, keepTokens, minAmounts);
     uint256 firstBurnToken0Amount = token0.balanceOf(address(tridentMaker));
     assertGt(token0.balanceOf(address(tridentMaker)), 0);
     assertEq(token1.balanceOf(address(tridentMaker)), 0);
 
-    keepTokens0[0] = false;
-    tridentMaker.burnSinglePairs(pairs, amounts, keepTokens0, minAmounts);
+    keepTokens[0] = address(token1);
+    tridentMaker.burnSinglePairs(pairs, amounts, keepTokens, minAmounts);
     assertEq(token0.balanceOf(address(tridentMaker)), firstBurnToken0Amount);
     assertGt(token1.balanceOf(address(tridentMaker)), 0);
 
     // test slippage protection
     minAmounts[0] = 1000 ether;
     vm.expectRevert(abi.encodeWithSignature("SlippageProtection()"));
-    tridentMaker.burnSinglePairs(pairs, amounts, keepTokens0, minAmounts);
+    tridentMaker.burnSinglePairs(pairs, amounts, keepTokens, minAmounts);
   }
 
   function testBurnPairs() public {

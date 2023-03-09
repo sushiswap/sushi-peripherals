@@ -19,24 +19,19 @@ contract TridentUnwindooor is Auth {
   /// @dev burns pairs and unwinds position into one of the two tokens
   /// @param pairs array of addresses of pairs to unwind
   /// @param amounts array of amounts to burn
-  /// @param keepTokens0 array of booleans indicating whether to keep token0 or token1
+  /// @param keepTokens addresses of tokens to keep for the burnSingle
   /// @param minimumOuts array of minimum amounts to receive (slippage protection)
   function burnSinglePairs(
     address[] calldata pairs,
     uint256[] calldata amounts,
-    bool[] calldata keepTokens0,
+    address[] calldata keepTokens,
     uint256[] calldata minimumOuts
   ) external onlyTrusted {
     for (uint256 i = 0; i < pairs.length; i++) {
       IPool pair = IPool(pairs[i]);
       _safeTransfer(address(pair), address(pair), amounts[i]);
 
-      bytes memory burnData;
-      if (keepTokens0[i]) {
-        burnData = abi.encode(pair.token0(), address(this), true);
-      } else {
-        burnData = abi.encode(pair.token1(), address(this), true);
-      }
+      bytes memory burnData = abi.encode(keepTokens[i], address(this), true);
 
       uint256 amountOut = pair.burnSingle(burnData);
       if (amountOut < minimumOuts[i]) revert SlippageProtection();
