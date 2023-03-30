@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
 pragma solidity =0.7.6;
 
-import "@uniswap/v3-core/contracts/libraries/FullMath.sol";
-import "@openzeppelin/contracts/math/Math.sol";
+import "v3-core/contracts/libraries/FullMath.sol";
+import "@openzeppelin/contracts/utils/math/Math.sol";
 
 /// @title Math for computing rewards
 /// @notice Allows computing rewards given some parameters of stakes and incentives

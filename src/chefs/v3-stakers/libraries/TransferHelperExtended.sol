@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
 pragma solidity >=0.6.0;
 
-import "@uniswap/v3-periphery/contracts/libraries/TransferHelper.sol";
-import "@openzeppelin/contracts/utils/Address.sol";
+import "v3-periphery/contracts/libraries/TransferHelper.sol";
+import "openzeppelin/utils/Address.sol";
 
 library TransferHelperExtended {
   using Address for address;

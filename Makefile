@@ -31,4 +31,7 @@ playground-trace: FOUNDRY_TEST:=playground
 playground-trace:
 	forge test --match-path playground/Playground.t.sol -vvvv --gas-report
 
+multi-build:
+	./tools/multibuild.sh 0.5.0 0.8.15
+
 .PHONY: test playground
